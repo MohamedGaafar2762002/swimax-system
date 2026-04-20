@@ -20,6 +20,9 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, service: "swimming-academy-api" });
+});
 
 const protectedApi = express.Router();
 protectedApi.use(authMiddleware);
