@@ -128,7 +128,7 @@ async function start() {
   }
 
   await connectDB();
-  await seedDefaultManager();
+  // await seedDefaultManager();
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`✅ API running on port ${PORT}`);
