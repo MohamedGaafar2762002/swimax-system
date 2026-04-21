@@ -19,26 +19,30 @@ const allowedOrigins = [
   "https://swimax-system.vercel.app",
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
+const corsOptions = {
+  origin(origin, callback) {
     if (!origin) return callback(null, true);
 
-    if (
-      allowedOrigins.includes(origin) ||
-      origin.includes("vercel.app")
-    ) {
+    let isVercelPreview = false;
+    try {
+      const hostname = new URL(origin).hostname;
+      isVercelPreview = hostname.endsWith(".vercel.app");
+    } catch {
+      isVercelPreview = false;
+    }
+
+    if (allowedOrigins.includes(origin) || isVercelPreview) {
       return callback(null, true);
     }
 
     return callback(new Error("Not allowed by CORS"));
   },
-  credentials: true,
-}));
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-app.options("*", cors({
-  origin: true,
-  credentials: true
-}));
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use("/uploads", express.static("uploads"));
