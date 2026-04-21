@@ -14,9 +14,9 @@ import traineeRoutes from "./routes/traineeRoutes.js";
 const app = express();
 
 /**
- * ✅ FIX: use Railway dynamic port correctly
+ * ✅ IMPORTANT: Railway port
  */
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 /**
  * ✅ Allowed origins
@@ -27,7 +27,7 @@ const allowedOrigins = [
 ];
 
 /**
- * ✅ CORS config (supports Vercel previews)
+ * ✅ CORS config (supports Vercel preview links)
  */
 const corsOptions = {
   origin: (origin, callback) => {
@@ -43,9 +43,11 @@ const corsOptions = {
         return callback(null, true);
       }
     } catch (err) {
+      console.error("CORS parse error:", err);
       return callback(null, false);
     }
 
+    console.warn("Blocked by CORS:", origin);
     return callback(new Error("Not allowed by CORS"));
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -54,29 +56,30 @@ const corsOptions = {
 };
 
 /**
- * ✅ APPLY CORS BEFORE ROUTES
+ * ✅ Apply middlewares
  */
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
-/**
- * ✅ Middlewares
- */
 app.use(express.json());
-app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
+
+/**
+ * ✅ Health check (IMPORTANT for Railway)
+ */
+app.get("/", (_req, res) => {
+  res.send("API is running 🚀");
+});
+
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, service: "swimming-academy-api" });
+});
 
 /**
  * ✅ Public routes
  */
 app.use("/api/auth", authRoutes);
-
-/**
- * ✅ Health check (for Railway)
- */
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "swimming-academy-api" });
-});
 
 /**
  * 🔒 Protected routes
@@ -87,7 +90,6 @@ protectedApi.use(authMiddleware);
 protectedApi.get("/health", (req, res) => {
   res.json({
     ok: true,
-    service: "swimming-academy-api",
     user: req.user?.username ?? null,
   });
 });
@@ -110,32 +112,43 @@ app.use((_req, res) => {
  * ❌ Error handler
  */
 app.use((err, _req, res, _next) => {
-  const status = err.statusCode || err.status || 500;
-  const message = err.message || "Internal server error";
+  console.error("💥 ERROR:", err);
 
-  console.error("❌ Error:", err);
-
-  res.status(status).json({ message });
+  res.status(err.status || 500).json({
+    message: err.message || "Internal server error",
+  });
 });
 
 /**
- * 🚀 Start server
+ * 🚀 Start server with FULL DEBUG
  */
 async function start() {
-  if (!process.env.JWT_SECRET) {
-    console.error("JWT_SECRET is required.");
+  try {
+    console.log("🚀 Starting server...");
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is missing");
+    }
+
+    console.log("🔐 JWT OK");
+
+    await connectDB();
+    console.log("✅ MongoDB Connected");
+
+    // await seedDefaultManager();
+
+    if (!PORT) {
+      throw new Error("PORT is missing from environment");
+    }
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🔥 Server running on port ${PORT}`);
+    });
+
+  } catch (err) {
+    console.error("💥 START ERROR:", err);
     process.exit(1);
   }
-
-  await connectDB();
-  // await seedDefaultManager();
-
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`✅ API running on port ${PORT}`);
-  });
 }
 
-start().catch((err) => {
-  console.error("❌ Failed to start server:", err);
-  process.exit(1);
-});
+start();
