@@ -2,10 +2,13 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+
 import { connectDB } from "./config/db.js";
 import { seedDefaultManager } from "./utils/seedManager.js";
+
 import authRoutes from "./routes/authRoutes.js";
 import { authMiddleware } from "./middleware/authMiddleware.js";
+
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import coachRoutes from "./routes/coachRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
@@ -14,9 +17,9 @@ import traineeRoutes from "./routes/traineeRoutes.js";
 const app = express();
 
 /**
- * ✅ IMPORTANT: Railway port
+ * ✅ IMPORTANT: dynamic port (Fly / Render / Railway)
  */
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 /**
  * ✅ Allowed origins
@@ -27,7 +30,7 @@ const allowedOrigins = [
 ];
 
 /**
- * ✅ CORS config (supports Vercel preview links)
+ * ✅ CORS config
  */
 const corsOptions = {
   origin: (origin, callback) => {
@@ -56,17 +59,21 @@ const corsOptions = {
 };
 
 /**
- * ✅ Apply middlewares
+ * ✅ Middlewares
  */
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
 app.use(express.json());
-app.use(morgan("dev"));
+
+app.use(
+  morgan(process.env.NODE_ENV === "production" ? "combined" : "dev")
+);
+
 app.use("/uploads", express.static("uploads"));
 
 /**
- * ✅ Health check (IMPORTANT for Railway)
+ * ✅ Health check (IMPORTANT)
  */
 app.get("/", (_req, res) => {
   res.send("API is running 🚀");
@@ -102,7 +109,7 @@ protectedApi.use("/attendance", attendanceRoutes);
 app.use("/api", protectedApi);
 
 /**
- * ❌ 404 handler
+ * ❌ 404
  */
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
@@ -120,7 +127,7 @@ app.use((err, _req, res, _next) => {
 });
 
 /**
- * 🚀 Start server with FULL DEBUG
+ * 🚀 Start server
  */
 async function start() {
   try {
@@ -135,11 +142,8 @@ async function start() {
     await connectDB();
     console.log("✅ MongoDB Connected");
 
+    // optional
     // await seedDefaultManager();
-
-    if (!PORT) {
-      throw new Error("PORT is missing from environment");
-    }
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`🔥 Server running on port ${PORT}`);
