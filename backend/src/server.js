@@ -35,7 +35,11 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options("*", cors());app.use(express.json());
+app.options("*", cors({
+  origin: true,
+  credentials: true
+}));
+app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use("/uploads", express.static("uploads"));
 
