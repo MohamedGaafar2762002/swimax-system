@@ -14,8 +14,15 @@ import traineeRoutes from "./routes/traineeRoutes.js";
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://swimax-system.vercel.app"
+  ],
+  credentials: true
+}));
+
+app.options("*", cors());app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use("/uploads", express.static("uploads"));
 
