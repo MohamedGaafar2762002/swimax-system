@@ -1,5 +1,5 @@
 import cloudinary from "../config/cloudinary.js";
-import Coach from "../models/coachModel.js";
+import Coach from "../models/Coach.js";
 
 /**
  * 🟢 Create Coach
