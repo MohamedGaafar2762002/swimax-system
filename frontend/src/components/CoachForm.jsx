@@ -30,7 +30,7 @@ export default function CoachForm({
     setBio(initialValues.bio ?? "");
 
     if (initialValues.image) {
-      setPreview(`http://localhost:5000/${initialValues.image}`);
+      setPreview(`${import.meta.env.VITE_API_URL}/${initialValues.image}`);
     } else {
       setPreview(null);
     }
@@ -73,7 +73,11 @@ export default function CoachForm({
         <div className="mt-3 flex items-center gap-4">
           <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-slate-800 to-slate-900 shadow-inner ring-1 ring-sky-400/10">
             {preview ? (
-              <img src={preview} alt="" className="h-full w-full object-cover" />
+              <img
+                src={preview}
+                alt=""
+                className="h-full w-full object-cover"
+              />
             ) : (
               <span className="text-xs text-slate-500">No photo</span>
             )}
@@ -132,7 +136,11 @@ export default function CoachForm({
           Cancel
         </button>
 
-        <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="btn-primary disabled:opacity-50"
+        >
           {submitting ? "Saving…" : submitLabel}
         </button>
       </div>

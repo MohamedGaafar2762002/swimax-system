@@ -82,8 +82,7 @@ export default function TraineeProfilePage() {
     );
   }
 
-  const BASE_URL = "http://localhost:5000";
-
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const imageUrl =
     trainee.image && trainee.image.startsWith("uploads/")
       ? `${BASE_URL}/${trainee.image}`
@@ -101,15 +100,23 @@ export default function TraineeProfilePage() {
 
       <div className="card-float overflow-hidden p-0">
         <div className="border-b border-cyan-500/10 bg-gradient-to-r from-cyan-500/10 via-transparent to-sky-500/10 px-8 py-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300/90">SWIMAX · Trainee</p>
-          <h1 className="mt-2 text-2xl font-semibold text-white md:text-3xl">{trainee.name}</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300/90">
+            SWIMAX · Trainee
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold text-white md:text-3xl">
+            {trainee.name}
+          </h1>
         </div>
 
         <div className="flex flex-col gap-6 p-8 md:grid md:grid-cols-[260px_minmax(0,1fr)] md:items-stretch">
           <div className="mx-auto w-full md:mx-0 md:self-start">
             <div className="relative h-full w-full overflow-hidden rounded-2xl border border-cyan-500/25 shadow-glow-sm ring-2 ring-cyan-400/10 md:h-[306px]">
               {imageUrl ? (
-                <img src={imageUrl} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={imageUrl}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 text-5xl font-bold text-cyan-400/40">
                   {firstLetter}
@@ -120,46 +127,64 @@ export default function TraineeProfilePage() {
 
           <div className="flex h-full flex-col gap-4">
             <div className="grid h-full gap-4 sm:grid-cols-2">
-            <div className="profile-stat">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Name</p>
-              <p className="mt-2 text-lg font-medium text-white">{trainee.name}</p>
-            </div>
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Name
+                </p>
+                <p className="mt-2 text-lg font-medium text-white">
+                  {trainee.name}
+                </p>
+              </div>
 
-            <div className="profile-stat">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Age</p>
-              <p className="mt-2 text-lg font-medium text-white">{trainee.age}</p>
-            </div>
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Age
+                </p>
+                <p className="mt-2 text-lg font-medium text-white">
+                  {trainee.age}
+                </p>
+              </div>
 
-            <div className="profile-stat border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent sm:col-span-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Skill level</p>
-              <p className="mt-2 bg-gradient-to-r from-sky-300 to-cyan-400 bg-clip-text text-xl font-bold text-transparent">
-                {trainee.level}
-              </p>
-            </div>
+              <div className="profile-stat border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent sm:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Skill level
+                </p>
+                <p className="mt-2 bg-gradient-to-r from-sky-300 to-cyan-400 bg-clip-text text-xl font-bold text-transparent">
+                  {trainee.level}
+                </p>
+              </div>
 
-            <div className="profile-stat">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Created</p>
-              <p className="mt-2 text-slate-300">
-                {trainee.createdAt ? new Date(trainee.createdAt).toLocaleString() : "—"}
-              </p>
-            </div>
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Created
+                </p>
+                <p className="mt-2 text-slate-300">
+                  {trainee.createdAt
+                    ? new Date(trainee.createdAt).toLocaleString()
+                    : "—"}
+                </p>
+              </div>
 
-            <div className="profile-stat sm:col-span-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Group session</p>
-              <p className="mt-2 text-slate-300">{sessionSummary(trainee)}</p>
-            </div>
+              <div className="profile-stat sm:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Group session
+                </p>
+                <p className="mt-2 text-slate-300">{sessionSummary(trainee)}</p>
+              </div>
 
-            <div className="profile-stat overflow-visible sm:col-span-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Notes</p>
-              <p
-                dir={notesIsArabic ? "rtl" : "ltr"}
-                className={`mt-2 whitespace-pre-wrap break-words leading-relaxed text-slate-300 ${
-                  notesIsArabic ? "text-right" : "text-left"
-                }`}
-              >
-                {notesText}
-              </p>
-            </div>
+              <div className="profile-stat overflow-visible sm:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Notes
+                </p>
+                <p
+                  dir={notesIsArabic ? "rtl" : "ltr"}
+                  className={`mt-2 whitespace-pre-wrap break-words leading-relaxed text-slate-300 ${
+                    notesIsArabic ? "text-right" : "text-left"
+                  }`}
+                >
+                  {notesText}
+                </p>
+              </div>
             </div>
           </div>
         </div>

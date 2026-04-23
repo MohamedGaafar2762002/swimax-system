@@ -34,7 +34,7 @@ export default function TraineeForm({
     setNotes(initialValues.notes ?? "");
 
     if (initialValues.image) {
-      setPreview(`http://localhost:5000/${initialValues.image}`);
+      setPreview(`${import.meta.env.VITE_API_URL}/${initialValues.image}`);
     } else {
       setPreview(null);
     }
@@ -77,7 +77,11 @@ export default function TraineeForm({
         <div className="mt-3 flex items-center gap-4">
           <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-slate-800 to-slate-900 text-xl font-semibold text-slate-400 shadow-inner ring-1 ring-cyan-400/10">
             {preview ? (
-              <img src={preview} className="h-full w-full object-cover" alt="" />
+              <img
+                src={preview}
+                className="h-full w-full object-cover"
+                alt=""
+              />
             ) : (
               name?.charAt(0)?.toUpperCase() || "?"
             )}
@@ -115,7 +119,9 @@ export default function TraineeForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-300">Level</label>
+        <label className="block text-sm font-medium text-slate-300">
+          Level
+        </label>
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value)}
@@ -151,7 +157,11 @@ export default function TraineeForm({
           Cancel
         </button>
 
-        <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="btn-primary disabled:opacity-50"
+        >
           {submitting ? "Saving…" : submitLabel}
         </button>
       </div>
