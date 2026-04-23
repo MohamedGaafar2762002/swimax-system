@@ -83,11 +83,7 @@ export default function TraineeProfilePage() {
   }
 
   const BASE_URL = import.meta.env.VITE_API_URL;
-  const imageUrl =
-    trainee.image && trainee.image.startsWith("uploads/")
-      ? `${BASE_URL}/${trainee.image}`
-      : null;
-
+  const imageUrl = trainee.image || null;
   const firstLetter = trainee.name?.charAt(0)?.toUpperCase() || "?";
   const notesText = trainee.notes?.trim() ? trainee.notes : "No notes added";
   const notesIsArabic = isArabic(notesText);

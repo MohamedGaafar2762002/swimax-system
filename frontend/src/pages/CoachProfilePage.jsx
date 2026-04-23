@@ -65,10 +65,8 @@ export default function CoachProfilePage() {
   }
 
   const BASE_URL = import.meta.env.VITE_API_URL;
-  const imageUrl =
-    coach.image && coach.image.startsWith("uploads/")
-      ? `${BASE_URL}/${coach.image}`
-      : null;
+   const imageUrl = trainee.image || null;
+
 
   const firstLetter = coach.name?.charAt(0)?.toUpperCase() || "?";
   const bioText = coach.bio?.trim() ? coach.bio : "—";
