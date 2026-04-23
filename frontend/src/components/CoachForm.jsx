@@ -29,8 +29,9 @@ export default function CoachForm({
     );
     setBio(initialValues.bio ?? "");
 
+    // ✅ التعديل المهم
     if (initialValues.image) {
-      setPreview(`${import.meta.env.VITE_API_URL}/${initialValues.image}`);
+      setPreview(initialValues.image); // ← Cloudinary URL مباشرة
     } else {
       setPreview(null);
     }
@@ -43,9 +44,7 @@ export default function CoachForm({
     if (!file) return;
 
     setImage(file);
-
-    const url = URL.createObjectURL(file);
-    setPreview(url);
+    setPreview(URL.createObjectURL(file));
   }
 
   async function handleSubmit(e) {

@@ -33,8 +33,9 @@ export default function TraineeForm({
     setLevel(initialValues.level ?? "Beginner");
     setNotes(initialValues.notes ?? "");
 
+    // ✅ هنا التعديل المهم
     if (initialValues.image) {
-      setPreview(`${import.meta.env.VITE_API_URL}/${initialValues.image}`);
+      setPreview(initialValues.image); // ← سيبه زي ما هو (Cloudinary URL)
     } else {
       setPreview(null);
     }

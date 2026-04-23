@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../services/api.js";
 import { formatDuration, hoursToMinutes } from "../utils/formatDuration.js";
+
 function getErrorMessage(err) {
   const msg = err?.response?.data?.message;
   if (typeof msg === "string") return msg;
@@ -64,9 +65,12 @@ export default function CoachProfilePage() {
     );
   }
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
-   const imageUrl = trainee.image || null;
-
+  // ✅ الحل الصح
+  const imageUrl = coach.image?.startsWith("http")
+    ? coach.image
+    : coach.image
+    ? `${import.meta.env.VITE_API_URL}/${coach.image}`
+    : null;
 
   const firstLetter = coach.name?.charAt(0)?.toUpperCase() || "?";
   const bioText = coach.bio?.trim() ? coach.bio : "—";
@@ -92,6 +96,7 @@ export default function CoachProfilePage() {
           <div className="mx-auto w-full md:mx-0 md:h-full md:self-stretch">
             <div className="relative h-full w-full overflow-hidden rounded-2xl border border-sky-500/20 shadow-glow-sm">
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
+
               {imageUrl ? (
                 <img
                   src={imageUrl}
