@@ -31,7 +31,12 @@ export async function createCoach(req, res, next) {
 export async function getAllCoaches(req, res, next) {
   try {
     const coaches = await Coach.find().sort({ createdAt: -1 });
-    res.json(coaches);
+    res.json({
+      coaches,
+      totalItems: coaches.length,
+      totalPages: 1,
+      currentPage: 1,
+    });
   } catch (err) {
     next(err);
   }
