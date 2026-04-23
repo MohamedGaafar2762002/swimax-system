@@ -24,16 +24,11 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // ⚙️ storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const name = file.originalname.replace(ext, "").replace(/\s+/g, "-");
-    const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, `${name}-${unique}${ext}`);
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "swimax",
+    allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
 
