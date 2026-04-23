@@ -10,10 +10,16 @@ const coachSchema = new mongoose.Schema(
 
     totalWorkingHours: { type: Number, default: 0, min: 0 },
 
-    // 🔥 NEW: coach image (optional)
+    // 🖼️ Image URL (Cloudinary)
     image: {
-      type: String, // هنخزن اسم الصورة أو URL
-      default: "",  // لو مفيش صورة
+      type: String,
+      default: "",
+    },
+
+    // 🔥 مهم: public_id عشان نقدر نمسح الصورة
+    imagePublicId: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

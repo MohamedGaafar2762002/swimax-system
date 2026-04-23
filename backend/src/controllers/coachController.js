@@ -1,179 +1,114 @@
-import mongoose from "mongoose";
-import Coach from "../models/Coach.js";
-import { escapeRegex } from "../utils/escapeRegex.js";
+import cloudinary from "../config/cloudinary.js";
+import Coach from "../models/coachModel.js";
 
-const ALLOWED_SORT_FIELDS = ["name", "age", "totalWorkingHours", "createdAt"];
-const MAX_PAGE_SIZE = 100;
-
-function parseCoachPayload(body) {
-  const { name, age, bio } = body ?? {};
-
-  if (!name || String(name).trim() === "") {
-    return { error: "Name is required" };
-  }
-
-  if (age === undefined || age === null || age === "") {
-    return { error: "Age is required" };
-  }
-
-  const ageNum = Number(age);
-  if (!Number.isFinite(ageNum) || ageNum < 0) {
-    return { error: "Age must be a valid non-negative number" };
-  }
-
-  return {
-    data: {
-      name: String(name).trim(),
-      age: ageNum,
-      bio: bio ? String(bio) : "",
-    },
-  };
-}
-
-function invalidIdResponse(res) {
-  return res.status(400).json({ message: "Invalid coach id" });
-}
-
-/* ================= CREATE ================= */
-
+/**
+ * 🟢 Create Coach
+ */
 export async function createCoach(req, res, next) {
   try {
-    const parsed = parseCoachPayload(req.body);
-    if (parsed.error) {
-      return res.status(400).json({ message: parsed.error });
-    }
+    const data = {
+      name: req.body.name,
+      age: req.body.age,
+      bio: req.body.bio,
+    };
 
-    // ✅ ثابت
     if (req.file) {
-      parsed.data.image = req.file.path;
+      data.image = req.file.path; // URL
+      data.imagePublicId = req.file.filename; // public_id
     }
 
-    const coach = await Coach.create(parsed.data);
-    return res.status(201).json(coach);
+    const coach = await Coach.create(data);
+
+    res.status(201).json(coach);
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }
 
-/* ================= GET ALL ================= */
-
+/**
+ * 🟢 Get All Coaches
+ */
 export async function getAllCoaches(req, res, next) {
   try {
-    const { search, sortBy, order } = req.query;
-
-    const page = Math.max(1, parseInt(req.query.page || "1"));
-    const limit = Math.min(MAX_PAGE_SIZE, parseInt(req.query.limit || "10"));
-
-    const filter = {};
-
-    if (search) {
-      filter.name = {
-        $regex: escapeRegex(search),
-        $options: "i",
-      };
-    }
-
-    const sortField = ALLOWED_SORT_FIELDS.includes(sortBy)
-      ? sortBy
-      : "createdAt";
-
-    const sortOrder = order === "asc" ? 1 : -1;
-
-    const totalItems = await Coach.countDocuments(filter);
-    const totalPages = Math.ceil(totalItems / limit);
-
-    const coaches = await Coach.find(filter)
-      .sort({ [sortField]: sortOrder })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .lean();
-
-    return res.json({
-      coaches,
-      currentPage: page,
-      totalPages,
-      totalItems,
-    });
+    const coaches = await Coach.find().sort({ createdAt: -1 });
+    res.json(coaches);
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }
 
-/* ================= GET BY ID ================= */
-
+/**
+ * 🟢 Get Coach By ID
+ */
 export async function getCoachById(req, res, next) {
   try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return invalidIdResponse(res);
-    }
-
-    const coach = await Coach.findById(id).lean();
+    const coach = await Coach.findById(req.params.id);
 
     if (!coach) {
       return res.status(404).json({ message: "Coach not found" });
     }
 
-    return res.json(coach);
+    res.json(coach);
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }
 
-/* ================= UPDATE ================= */
-
+/**
+ * 🟢 Update Coach
+ */
 export async function updateCoach(req, res, next) {
   try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return invalidIdResponse(res);
-    }
-
-    const parsed = parseCoachPayload(req.body);
-    if (parsed.error) {
-      return res.status(400).json({ message: parsed.error });
-    }
-
-    // ✅ نفس الشكل زي create
-    if (req.file) {
-      parsed.data.image = req.file.path;
-    }
-
-    const coach = await Coach.findByIdAndUpdate(id, parsed.data, {
-      new: true,
-      runValidators: true,
-    }).lean();
+    const coach = await Coach.findById(req.params.id);
 
     if (!coach) {
       return res.status(404).json({ message: "Coach not found" });
     }
 
-    return res.json(coach);
+    // ✏️ update fields
+    coach.name = req.body.name ?? coach.name;
+    coach.age = req.body.age ?? coach.age;
+    coach.bio = req.body.bio ?? coach.bio;
+
+    // 🧨 لو فيه صورة جديدة
+    if (req.file) {
+      // احذف القديمة لو موجودة
+      if (coach.imagePublicId) {
+        await cloudinary.uploader.destroy(coach.imagePublicId);
+      }
+
+      coach.image = req.file.path;
+      coach.imagePublicId = req.file.filename;
+    }
+
+    await coach.save();
+
+    res.json(coach);
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }
 
-/* ================= DELETE ================= */
-
+/**
+ * 🟢 Delete Coach
+ */
 export async function deleteCoach(req, res, next) {
   try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return invalidIdResponse(res);
-    }
-
-    const coach = await Coach.findByIdAndDelete(id).lean();
+    const coach = await Coach.findById(req.params.id);
 
     if (!coach) {
       return res.status(404).json({ message: "Coach not found" });
     }
 
-    return res.json({ message: "Coach deleted", id: coach._id });
+    // 🧨 احذف الصورة من Cloudinary
+    if (coach.imagePublicId) {
+      await cloudinary.uploader.destroy(coach.imagePublicId);
+    }
+
+    await coach.deleteOne();
+
+    res.json({ message: "Coach deleted successfully" });
   } catch (err) {
-    return next(err);
+    next(err);
   }
 }

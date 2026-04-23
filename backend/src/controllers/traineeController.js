@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import "../models/Session.js";
 import Trainee, { TRAINEE_LEVELS } from "../models/Trainee.js";
 import { escapeRegex } from "../utils/escapeRegex.js";
+import cloudinary from "../config/cloudinary.js";
 
 const ALLOWED_SORT_FIELDS = ["name", "age", "level", "createdAt"];
 const MAX_PAGE_SIZE = 100;
@@ -57,7 +58,7 @@ function parseTraineePayload(body) {
   return { data };
 }
 
-/* ================= CREATE (🔥 WITH IMAGE) ================= */
+/* ================= CREATE ================= */
 
 export async function createTrainee(req, res, next) {
   try {
@@ -67,9 +68,10 @@ export async function createTrainee(req, res, next) {
       return res.status(400).json({ message: parsed.error });
     }
 
-    // 🔥 صورة (اختياري)
+    // 🔥 صورة (Cloudinary)
     if (req.file) {
       parsed.data.image = req.file.path;
+      parsed.data.imagePublicId = req.file.filename;
     }
 
     const trainee = await Trainee.create(parsed.data);
@@ -143,7 +145,9 @@ export async function getTraineeById(req, res, next) {
       return invalidIdResponse(res);
     }
 
-    const trainee = await Trainee.findById(id).populate(populateSession).lean();
+    const trainee = await Trainee.findById(id)
+      .populate(populateSession)
+      .lean();
 
     if (!trainee) {
       return res.status(404).json({ message: "Trainee not found" });
@@ -155,7 +159,7 @@ export async function getTraineeById(req, res, next) {
   }
 }
 
-/* ================= UPDATE (🔥 WITH IMAGE) ================= */
+/* ================= UPDATE ================= */
 
 export async function updateTrainee(req, res, next) {
   try {
@@ -171,23 +175,34 @@ export async function updateTrainee(req, res, next) {
       return res.status(400).json({ message: parsed.error });
     }
 
-    // 🔥 صورة جديدة
-    if (req.file) {
-      parsed.data.image = req.file.path;
-    }
-
-    const trainee = await Trainee.findByIdAndUpdate(id, parsed.data, {
-      new: true,
-      runValidators: true,
-    })
-      .populate(populateSession)
-      .lean();
+    const trainee = await Trainee.findById(id);
 
     if (!trainee) {
       return res.status(404).json({ message: "Trainee not found" });
     }
 
-    return res.json(trainee);
+    // ✏️ تحديث البيانات
+    Object.assign(trainee, parsed.data);
+
+    // 🔥 لو في صورة جديدة
+    if (req.file) {
+      // امسح القديمة
+      if (trainee.imagePublicId) {
+        await cloudinary.uploader.destroy(trainee.imagePublicId);
+      }
+
+      // خزّن الجديدة
+      trainee.image = req.file.path;
+      trainee.imagePublicId = req.file.filename;
+    }
+
+    await trainee.save();
+
+    const populated = await Trainee.findById(id)
+      .populate(populateSession)
+      .lean();
+
+    return res.json(populated);
   } catch (err) {
     return next(err);
   }
@@ -203,11 +218,18 @@ export async function deleteTrainee(req, res, next) {
       return invalidIdResponse(res);
     }
 
-    const trainee = await Trainee.findByIdAndDelete(id).lean();
+    const trainee = await Trainee.findById(id);
 
     if (!trainee) {
       return res.status(404).json({ message: "Trainee not found" });
     }
+
+    // 🔥 امسح الصورة من Cloudinary
+    if (trainee.imagePublicId) {
+      await cloudinary.uploader.destroy(trainee.imagePublicId);
+    }
+
+    await trainee.deleteOne();
 
     return res.json({
       message: "Trainee deleted",

@@ -18,9 +18,15 @@ const traineeSchema = new mongoose.Schema(
       default: null,
     },
 
-    // 🔥 NEW: trainee image (optional)
+    // 🖼️ Image URL (Cloudinary)
     image: {
-      type: String, // هيتخزن path زي uploads/trainees/xxx.jpg
+      type: String,
+      default: "",
+    },
+
+    // 🔥 مهم جدًا: public_id عشان نقدر نمسح الصورة
+    imagePublicId: {
+      type: String,
       default: "",
     },
   },
