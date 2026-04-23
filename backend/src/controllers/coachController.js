@@ -45,7 +45,7 @@ export async function createCoach(req, res, next) {
 
     // ✅ ثابت
     if (req.file) {
-      parsed.data.image = `uploads/coaches/${req.file.filename}`;
+      parsed.data.image = req.file.path;
     }
 
     const coach = await Coach.create(parsed.data);
@@ -138,7 +138,7 @@ export async function updateCoach(req, res, next) {
 
     // ✅ نفس الشكل زي create
     if (req.file) {
-      parsed.data.image = `uploads/coaches/${req.file.filename}`;
+      parsed.data.image = req.file.path;
     }
 
     const coach = await Coach.findByIdAndUpdate(id, parsed.data, {

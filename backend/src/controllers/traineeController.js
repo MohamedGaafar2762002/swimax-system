@@ -69,7 +69,7 @@ export async function createTrainee(req, res, next) {
 
     // 🔥 صورة (اختياري)
     if (req.file) {
-      parsed.data.image = `uploads/trainees/${req.file.filename}`;
+      parsed.data.image = req.file.path;
     }
 
     const trainee = await Trainee.create(parsed.data);
@@ -143,9 +143,7 @@ export async function getTraineeById(req, res, next) {
       return invalidIdResponse(res);
     }
 
-    const trainee = await Trainee.findById(id)
-      .populate(populateSession)
-      .lean();
+    const trainee = await Trainee.findById(id).populate(populateSession).lean();
 
     if (!trainee) {
       return res.status(404).json({ message: "Trainee not found" });
@@ -175,7 +173,7 @@ export async function updateTrainee(req, res, next) {
 
     // 🔥 صورة جديدة
     if (req.file) {
-      parsed.data.image = `uploads/trainees/${req.file.filename}`;
+      parsed.data.image = req.file.path;
     }
 
     const trainee = await Trainee.findByIdAndUpdate(id, parsed.data, {
