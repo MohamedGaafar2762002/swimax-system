@@ -105,16 +105,13 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_35%_25%,rgba(34,211,238,0.10),transparent_55%)]" />
 
         <div className="relative">
-          <p className="text-sm font-extrabold uppercase tracking-[0.18em] text-slate-100">
+          <h1 className="text-[1.6rem] md:text-[1.9rem] font-black leading-[1.4] tracking-[0.12em] text-slate-100">
             WELCOME BACK ,{" "}
-            <span className="bg-gradient-to-r from-cyan-300 to-sky-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-300 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(34,211,238,0.6)]">
               ADMIN
             </span>{" "}
-            <span aria-hidden>👋</span>
-          </p>
-          <p className="mt-2 text-sm text-slate-300/70">
-            Here&apos;s your SWIMAX overview for today.
-          </p>
+            👋
+          </h1>
         </div>
       </section>
 
@@ -124,13 +121,33 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.16),transparent_55%)]" />
           <div className="relative flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-300/70">Total Coaches</p>
-              <p className="mt-1 text-2xl font-bold text-slate-100">{stats.coaches}</p>
+              <p className="text-xs font-medium text-slate-300/70">
+                Total Coaches
+              </p>
+              <p className="mt-1 text-2xl font-bold text-slate-100">
+                {stats.coaches}
+              </p>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
-                <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M12 13a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20 21a8 8 0 0 0-16 0"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M12 13a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </span>
           </div>
@@ -140,13 +157,31 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(34,211,238,0.16),transparent_55%)]" />
           <div className="relative flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-300/70">Total Trainees</p>
-              <p className="mt-1 text-2xl font-bold text-slate-100">{stats.trainees}</p>
+              <p className="text-xs font-medium text-slate-300/70">
+                Total Trainees
+              </p>
+              <p className="mt-1 text-2xl font-bold text-slate-100">
+                {stats.trainees}
+              </p>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-sky-200">
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
-                <path d="M16 11a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke="currentColor" strokeWidth="1.8" />
-                <path d="M4.5 21a7.5 7.5 0 0 1 15 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M16 11a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <path
+                  d="M4.5 21a7.5 7.5 0 0 1 15 0"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>
           </div>
@@ -156,14 +191,38 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(125,211,252,0.14),transparent_55%)]" />
           <div className="relative flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-300/70">Group Sessions</p>
-              <p className="mt-1 text-2xl font-bold text-slate-100">{stats.sessions}</p>
+              <p className="text-xs font-medium text-slate-300/70">
+                Group Sessions
+              </p>
+              <p className="mt-1 text-2xl font-bold text-slate-100">
+                {stats.sessions}
+              </p>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
-                <path d="M7 3v3M17 3v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M4 8h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7 3v3M17 3v3"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M4 8h16"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M6 5h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
               </svg>
             </span>
           </div>
@@ -173,14 +232,39 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.14),transparent_55%)]" />
           <div className="relative flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-300/70">Active Now</p>
-              <p className="mt-1 text-2xl font-bold text-slate-100">{currentSessions.length}</p>
+              <p className="text-xs font-medium text-slate-300/70">
+                Active Now
+              </p>
+              <p className="mt-1 text-2xl font-bold text-slate-100">
+                {currentSessions.length}
+              </p>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-amber-200">
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
-                <path d="M12 2v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M12 22a9 9 0 1 0-9-9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <path d="M6 13h6l3-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2v6"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M12 22a9 9 0 1 0-9-9"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M6 13h6l3-3"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </span>
           </div>
@@ -208,11 +292,15 @@ export default function HomePage() {
               <div className="relative mt-4 space-y-3 text-sm">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-slate-300/70">Coach</p>
-                  <p className="font-semibold text-slate-100">{coachName(activeSession)}</p>
+                  <p className="font-semibold text-slate-100">
+                    {coachName(activeSession)}
+                  </p>
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-slate-300/70">No. of trainees</p>
-                  <p className="font-semibold text-slate-100">{traineeCountLabel(activeSession)}</p>
+                  <p className="font-semibold text-slate-100">
+                    {traineeCountLabel(activeSession)}
+                  </p>
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-slate-300/70">Slot</p>
@@ -261,11 +349,15 @@ export default function HomePage() {
             <div className="relative mt-4 space-y-3">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm text-slate-300/70">Coach</p>
-                <p className="text-sm font-semibold text-slate-100">{coachName(upcomingSession)}</p>
+                <p className="text-sm font-semibold text-slate-100">
+                  {coachName(upcomingSession)}
+                </p>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm text-slate-300/70">No. of trainees</p>
-                <p className="text-sm font-semibold text-slate-100">{traineeCountLabel(upcomingSession)}</p>
+                <p className="text-sm font-semibold text-slate-100">
+                  {traineeCountLabel(upcomingSession)}
+                </p>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm text-slate-300/70">Starts</p>
