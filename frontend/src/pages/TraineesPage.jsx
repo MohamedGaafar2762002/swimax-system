@@ -210,11 +210,6 @@ export default function TraineesPage() {
   return (
     <div className="animate-fade-in space-y-10">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/90">SWIMAX · Swimmers</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">Trainees</h1>
-        
-        </div>
 
         <button type="button" onClick={openCreate} className="btn-primary shrink-0">
           Add trainee

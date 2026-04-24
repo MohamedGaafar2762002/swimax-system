@@ -383,8 +383,6 @@ export default function SessionsPage() {
     <div className="animate-fade-in space-y-10">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400/90">SWIMAX · Schedule</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">Sessions</h1>
           <p className="mt-2 max-w-xl text-slate-400">
           </p>
         </div>

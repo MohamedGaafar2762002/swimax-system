@@ -256,11 +256,6 @@ export default function AttendancePage() {
 
   return (
     <div className="animate-fade-in space-y-10">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/90">SWIMAX · Reports</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">Attendance & payroll</h1>
-        
-      </div>
 
       {error && (
         <div className="rounded-2xl border border-amber-500/35 bg-amber-950/35 px-4 py-3 text-sm text-amber-100">
