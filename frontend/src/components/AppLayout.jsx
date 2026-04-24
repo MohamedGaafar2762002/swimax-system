@@ -133,7 +133,7 @@ export default function AppLayout() {
         {/* Main */}
         <div className="md:ml-[280px] min-w-0">
 
-          {/* ✅ Header ثابت + height ثابت */}
+          {/* Header */}
           <header className="fixed top-0 left-[280px] right-0 h-[70px] z-40 border-b border-white/5 bg-slate-950/60 backdrop-blur-xl flex items-center">
             <div className="w-full px-4 md:px-6">
               <h1 className="text-[1.2rem] md:text-[1.4rem] font-black leading-[1.4] tracking-[0.18em] text-cyan-200">
@@ -142,8 +142,8 @@ export default function AppLayout() {
             </div>
           </header>
 
-          {/* ✅ أهم سطر هنا */}
-          <main className="mt-[70px] min-h-[calc(100vh-70px)] px-4 py-5 md:px-6 md:py-6">
+          {/* Content */}
+          <main className="mt-[70px] px-4 py-5 md:px-6 md:py-6">
             <Outlet />
           </main>
         </div>
