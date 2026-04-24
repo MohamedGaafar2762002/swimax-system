@@ -154,15 +154,15 @@ export default function AppLayout() {
 
         {/* Main */}
         <div className="md:ml-[280px] min-w-0">
-          <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/30 backdrop-blur-xl">
+          <header className="fixed top-0 left-[280px] right-0 z-40 border-b border-white/5 bg-slate-950/60 backdrop-blur-xl">
             <div className="flex items-center justify-between px-4 py-4 md:px-6">
-              <h1 className="text-[1.2rem] md:text-[1.4rem] font-black leading-[1.4] tracking-[0.18em] text-slate-100">
+              <h1 className="text-[1.2rem] md:text-[1.4rem] font-black leading-[1.4] tracking-[0.18em] text-cyan-200">
                 {pageTitle}
               </h1>
             </div>
           </header>
 
-          <main className="min-h-[calc(100vh-4.25rem)] px-4 py-5 md:px-6 md:py-6">
+          <main className="pt-[80px] min-h-[calc(100vh-4.25rem)] px-4 py-5 md:px-6 md:py-6">
             <Outlet />
           </main>
         </div>
