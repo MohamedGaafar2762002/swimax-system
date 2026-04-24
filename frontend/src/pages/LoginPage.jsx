@@ -73,14 +73,6 @@ export default function LoginPage() {
                   opacity="0.5"
                 />
                 <circle cx="24" cy="16" r="7" fill="url(#circleGrad)" />
-                <path
-                  d="M20 14 L24 10 L28 14"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
                 <defs>
                   <linearGradient id="waveGrad" x1="6" y1="30" x2="42" y2="30" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#00c4ff" />

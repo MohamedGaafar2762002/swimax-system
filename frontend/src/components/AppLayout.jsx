@@ -62,8 +62,7 @@ export default function AppLayout() {
         <aside
           ref={menuRef}
           className={[
-            "fixed left-0 top-0 z-40 h-full w-[280px] border-r border-white/5 bg-slate-950/35 backdrop-blur-xl",
-            "md:block",
+            "fixed left-0 top-0 z-40 h-full w-[280px] border-r border-white/5 bg-[#060e1ef7] backdrop-blur-xl",,
             sidebarOpen ? "block" : "hidden md:block",
           ].join(" ")}
         >

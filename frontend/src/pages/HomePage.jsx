@@ -11,7 +11,8 @@ function coachName(session) {
 function traineeCountNumber(session) {
   if (typeof session?.traineeCount === "number") return session.traineeCount;
   if (typeof session?.traineesCount === "number") return session.traineesCount;
-  if (typeof session?.traineesLength === "number") return session.traineesLength;
+  if (typeof session?.traineesLength === "number")
+    return session.traineesLength;
   if (Array.isArray(session?.trainees)) return session.trainees.length;
   if (Array.isArray(session?.traineeIds)) return session.traineeIds.length;
   if (Array.isArray(session?.traineesIds)) return session.traineesIds.length;
@@ -26,7 +27,15 @@ function traineeCountLabel(session) {
 }
 
 function dayNameFromDate(date) {
-  return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][date.getDay()];
+  return [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ][date.getDay()];
 }
 
 function computeActiveSessionsLocal(sessions) {
@@ -162,22 +171,23 @@ export default function HomePage() {
     );
   }
 
-  const effectiveCurrentSessions = currentSessions.length ? currentSessions : fallbackSessions;
+  const effectiveCurrentSessions = currentSessions.length
+    ? currentSessions
+    : fallbackSessions;
   const activeSession = effectiveCurrentSessions[currentIndex];
   const upcomingTraineesCount = useMemo(
     () => traineeCountNumber(upcomingSession),
-    [upcomingSession],
+    [upcomingSession]
   );
 
   return (
     <div className="relative animate-fade-in space-y-5">
-
       {/* 🔥 Welcome */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 via-white/[0.03] to-transparent p-6 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(135deg,rgba(0,196,255,0.1),rgba(0,100,150,0.07))] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
         <div className="absolute -right-10 -top-10 h-44 w-44 bg-cyan-400/10 blur-3xl rounded-full" />
         <div className="absolute -left-14 -bottom-14 h-56 w-56 bg-sky-400/10 blur-3xl rounded-full" />
 
-        <h1 className="text-[1.5rem] md:text-[1.8rem] font-black leading-[1.5] tracking-[0.15em] text-slate-100">
+        <h1 className="text-[1.9rem] font-black leading-[1.5] tracking-[0.05em] text-slate-100">
           WELCOME BACK ,{" "}
           <span className="bg-gradient-to-r from-cyan-300 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(34,211,238,0.7)]">
             ADMIN
@@ -187,7 +197,6 @@ export default function HomePage() {
 
       {/* 🔥 Stats */}
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
         {[
           { label: "Total Coaches", value: stats.coaches },
           { label: "Total Trainees", value: stats.trainees },
@@ -196,7 +205,7 @@ export default function HomePage() {
         ].map((item, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl shadow-lg hover:scale-[1.02] transition"
+            className="rounded-2xl border border-white/10 bg-[rgba(10,22,46,0.8)] p-5 backdrop-blur-xl shadow-lg hover:scale-[1.02] transition"
           >
             <p className="text-xs text-slate-300/70">{item.label}</p>
             <p className="mt-2 text-2xl font-bold text-slate-100">
@@ -205,10 +214,8 @@ export default function HomePage() {
           </div>
         ))}
       </section>
-
       {/* 🔥 Bottom */}
       <section className="grid gap-4 md:grid-cols-2">
-
         {/* Current */}
         <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl shadow-lg">
           <h2 className="text-sm font-extrabold tracking-[0.2em] text-slate-100">
@@ -241,9 +248,7 @@ export default function HomePage() {
               </div>
             </div>
           ) : (
-            <p className="mt-4 text-slate-400 text-sm">
-              No session running.
-            </p>
+            <p className="mt-4 text-slate-400 text-sm">No session running.</p>
           )}
         </div>
 
@@ -279,9 +284,7 @@ export default function HomePage() {
               </div>
             </div>
           ) : (
-            <p className="mt-4 text-slate-400 text-sm">
-              No upcoming session.
-            </p>
+            <p className="mt-4 text-slate-400 text-sm">No upcoming session.</p>
           )}
         </div>
       </section>
