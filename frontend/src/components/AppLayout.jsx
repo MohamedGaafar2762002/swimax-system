@@ -57,7 +57,7 @@ export default function AppLayout() {
     <>
       <UnderwaterBackground />
 
-      <div className="relative z-0 grid min-h-screen w-full grid-cols-1 md:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="fixed left-0 top-0 z-40 h-screen w-[280px] border-r border-white/5 bg-slate-950/35 backdrop-blur-xl">
         {/* Sidebar */}
         <aside
           ref={menuRef}
