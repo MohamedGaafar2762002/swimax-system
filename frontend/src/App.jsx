@@ -14,19 +14,25 @@ import ChangePasswordPage from "./pages/ChangePasswordPage.jsx";
 
 export default function App() {
   return (
-    <div className="min-h-full bg-[#0f172a] text-slate-100">
-      {/* Water-inspired ambient gradient */}
+    <div className="min-h-screen bg-[#0f172a] text-slate-100 overflow-x-hidden">
+      
+      {/* Background (fixed) */}
       <div
-        className="pointer-events-none fixed inset-0 overflow-hidden"
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
         aria-hidden="true"
       >
         <div className="absolute -left-1/4 top-0 h-[min(70vh,600px)] w-[min(70vw,700px)] rounded-full bg-sky-500/10 blur-[100px]" />
         <div className="absolute -right-1/4 bottom-0 h-[min(60vh,500px)] w-[min(60vw,600px)] rounded-full bg-cyan-500/10 blur-[100px]" />
         <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-sky-400/5 blur-3xl" />
       </div>
-      <div className="relative z-10 min-h-full">
+
+      {/* App Content */}
+      <div className="relative z-10 min-h-screen">
         <Routes>
+          {/* Public */}
           <Route path="/login" element={<LoginPage />} />
+
+          {/* Protected */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route index element={<HomePage />} />
@@ -40,6 +46,8 @@ export default function App() {
               <Route path="change-password" element={<ChangePasswordPage />} />
             </Route>
           </Route>
+
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
