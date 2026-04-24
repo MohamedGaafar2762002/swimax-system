@@ -8,7 +8,9 @@ function navLinkClass({ isActive }) {
     "group flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition",
     "text-slate-300/80 hover:bg-white/5 hover:text-slate-100",
     isActive ? "bg-cyan-400/10 text-cyan-100 ring-1 ring-cyan-300/20" : "",
-  ].join(" ").trim();
+  ]
+    .join(" ")
+    .trim();
 }
 
 export default function AppLayout() {
@@ -68,12 +70,8 @@ export default function AppLayout() {
           ].join(" ")}
         >
           <div className="flex h-full flex-col px-5 py-6">
-
             {/* 🔥 Logo (FIXED DESIGN) */}
-            <NavLink
-              to="/"
-              className="flex items-center gap-4 px-2 py-2"
-            >
+            <NavLink to="/" className="flex items-center gap-4 px-2 py-2">
               {/* ICON بدون مربع */}
               <svg
                 viewBox="0 0 48 48"
@@ -94,13 +92,6 @@ export default function AppLayout() {
                   opacity="0.5"
                 />
                 <circle cx="24" cy="16" r="7" fill="url(#circleGrad)" />
-                <path
-                  d="M20 14 L24 10 L28 14"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
                 <defs>
                   <linearGradient id="waveGrad" x1="6" y1="30" x2="42" y2="30">
                     <stop stopColor="#00c4ff" />
@@ -125,11 +116,21 @@ export default function AppLayout() {
 
             {/* Links */}
             <div className="mt-6 space-y-1.5">
-              <NavLink to="/" end className={navLinkClass}>Home</NavLink>
-              <NavLink to="/coaches" className={navLinkClass}>Coaches</NavLink>
-              <NavLink to="/trainees" className={navLinkClass}>Trainees</NavLink>
-              <NavLink to="/sessions" className={navLinkClass}>Sessions</NavLink>
-              <NavLink to="/attendance" className={navLinkClass}>Attendance</NavLink>
+              <NavLink to="/" end className={navLinkClass}>
+                Home
+              </NavLink>
+              <NavLink to="/coaches" className={navLinkClass}>
+                Coaches
+              </NavLink>
+              <NavLink to="/trainees" className={navLinkClass}>
+                Trainees
+              </NavLink>
+              <NavLink to="/sessions" className={navLinkClass}>
+                Sessions
+              </NavLink>
+              <NavLink to="/attendance" className={navLinkClass}>
+                Attendance
+              </NavLink>
             </div>
 
             {/* Bottom */}
@@ -155,7 +156,7 @@ export default function AppLayout() {
         <div className="md:ml-[280px] min-w-0">
           <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/30 backdrop-blur-xl">
             <div className="flex items-center justify-between px-4 py-4 md:px-6">
-              <h1 className="text-sm font-extrabold tracking-[0.28em] text-slate-100">
+              <h1 className="text-[1.2rem] md:text-[1.4rem] font-black leading-[1.4] tracking-[0.18em] text-slate-100">
                 {pageTitle}
               </h1>
             </div>
