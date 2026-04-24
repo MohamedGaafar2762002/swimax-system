@@ -196,9 +196,7 @@ export default function CoachesPage() {
       : null;
 
   return (
-    <div className="animate-fade-in space-y-5">
-      {" "}
-      {/* 👈 قللنا المسافات */}
+    <div className="animate-fade-in space-y-4 md:space-y-5">
       {error && (
         <div className="rounded-xl border border-red-500/30 bg-red-950/30 px-3 py-2 text-xs text-red-100">
           {error}
@@ -216,11 +214,11 @@ export default function CoachesPage() {
         onLimitChange={handleLimitChange}
       />
       {/* 🔥 BUTTON تحت السيرش */}
-      <div className="flex justify-start">
+      <div className="flex justify-end">
         <button
           type="button"
           onClick={openCreate}
-          className="btn-primary px-5 py-2 text-sm rounded-xl"
+          className="btn-primary inline-flex w-auto shrink-0 rounded-2xl px-4 py-2.5"
         >
           Add coach
         </button>

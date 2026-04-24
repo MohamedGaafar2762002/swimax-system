@@ -69,13 +69,13 @@ export default function TraineeForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-slate-300">
           Photo <span className="text-slate-500">(optional)</span>
         </label>
 
-        <div className="mt-3 flex items-center gap-4">
+        <div className="mt-2 flex items-center gap-4">
           <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-slate-800 to-slate-900 text-xl font-semibold text-slate-400 shadow-inner ring-1 ring-cyan-400/10">
             {preview ? (
               <img
@@ -148,7 +148,7 @@ export default function TraineeForm({
         />
       </div>
 
-      <div className="flex flex-wrap justify-end gap-3 pt-2">
+      <div className="flex flex-wrap justify-end gap-2 pt-1">
         <button
           type="button"
           onClick={onCancel}

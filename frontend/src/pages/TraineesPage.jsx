@@ -208,14 +208,7 @@ export default function TraineesPage() {
       : null;
 
   return (
-    <div className="animate-fade-in space-y-10">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-
-        <button type="button" onClick={openCreate} className="btn-primary shrink-0">
-          Add trainee
-        </button>
-      </div>
-
+    <div className="animate-fade-in space-y-4 md:space-y-5">
       {error && (
         <div className="rounded-2xl border border-red-500/30 bg-red-950/35 px-4 py-3 text-sm text-red-100">
           {error}
@@ -234,6 +227,12 @@ export default function TraineesPage() {
         level={level}
         onLevelChange={setLevel}
       />
+
+      <div className="flex justify-end">
+        <button type="button" onClick={openCreate} className="btn-primary inline-flex w-auto shrink-0">
+          Add trainee
+        </button>
+      </div>
 
       <TraineeTable
         trainees={trainees}

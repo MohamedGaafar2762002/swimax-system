@@ -52,10 +52,11 @@ export default function ChangePasswordPage() {
 
   return (
     <div className="relative flex min-h-[70vh] items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-2xl border border-sky-500/20 bg-gradient-to-b from-slate-800/90 to-slate-900/95 p-8 shadow-float shadow-glow backdrop-blur-xl">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">Change Password</h1>
+      <div className="w-full max-w-md overflow-hidden rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-slate-800/70 via-slate-900/65 to-slate-950/85 p-6 shadow-[0_0_0_1px_rgba(34,211,238,0.06),0_14px_44px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(34,211,238,0.14),transparent_55%)]" aria-hidden />
+        <h1 className="relative text-xl font-semibold tracking-tight text-white">Change Password</h1>
 
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+        <form className="relative mt-5 space-y-4" onSubmit={handleSubmit}>
           {error && (
             <div className="rounded-xl border border-amber-500/35 bg-amber-950/35 px-4 py-3 text-sm text-amber-100">
               {error}
@@ -112,9 +113,11 @@ export default function ChangePasswordPage() {
             />
           </div>
 
-          <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60">
-            {loading ? "Updating..." : "Update Password"}
-          </button>
+          <div className="pt-1">
+            <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60">
+              {loading ? "Updating..." : "Update Password"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

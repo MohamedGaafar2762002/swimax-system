@@ -76,28 +76,27 @@ export default function SessionDetailsPage() {
   const schedule = Array.isArray(session.schedule) ? session.schedule : [];
 
   return (
-    <div className="animate-fade-in space-y-8">
+    <div className="animate-fade-in space-y-4 md:space-y-5">
       <div>
         <Link to="/sessions" className="link-back">
           ← Back to sessions
         </Link>
-        <h1 className="mt-6 text-3xl font-semibold tracking-tight text-white md:text-4xl">Group schedule</h1>
       </div>
 
-      <div className="card-float grid gap-6 p-8 sm:grid-cols-2">
+      <div className="card-float grid gap-4 p-5 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400/90">Coach</p>
-          <p className="mt-2 text-2xl font-semibold text-white">{coachName(session)}</p>
+          <p className="mt-2 text-xl font-semibold text-white md:text-2xl">{coachName(session)}</p>
         </div>
 
         <div className="sm:col-span-2">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Weekly slots</p>
           {schedule.length ? (
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {schedule.map((slot, index) => (
                 <div
                   key={`${slot.day}-${slot.startTime}-${slot.endTime}-${index}`}
-                  className="rounded-2xl border border-slate-700/50 bg-slate-950/50 p-5 transition hover:border-sky-500/25"
+                  className="rounded-2xl border border-slate-700/50 bg-slate-950/50 p-4 transition hover:border-sky-500/25"
                 >
                   <p className="font-semibold text-sky-200">{slot.day}</p>
                   <p className="mt-2 text-sm text-slate-300">
@@ -124,11 +123,11 @@ export default function SessionDetailsPage() {
         <div className="sm:col-span-2">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Trainees</p>
           {trainees.length ? (
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {trainees.map((trainee) => (
                 <div
                   key={trainee._id}
-                  className="rounded-2xl border border-slate-700/50 bg-slate-950/40 px-5 py-4 transition hover:border-cyan-500/20"
+                  className="rounded-2xl border border-slate-700/50 bg-slate-950/40 px-4 py-3.5 transition hover:border-cyan-500/20"
                 >
                   <p className="font-medium text-white">{trainee.name}</p>
                   <p className="mt-1 text-sm text-cyan-200/80">{trainee.level}</p>

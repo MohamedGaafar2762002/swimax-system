@@ -380,17 +380,7 @@ export default function SessionsPage() {
         : null;
 
   return (
-    <div className="animate-fade-in space-y-10">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="mt-2 max-w-xl text-slate-400">
-          </p>
-        </div>
-        <button type="button" onClick={openCreate} className="btn-primary inline-flex shrink-0 items-center justify-center">
-          Add session
-        </button>
-      </div>
-
+    <div className="animate-fade-in space-y-4 md:space-y-5">
       {error && (
         <div className="rounded-2xl border border-amber-500/35 bg-amber-950/35 px-4 py-3 text-sm text-amber-100">
           {error}
@@ -412,14 +402,24 @@ export default function SessionsPage() {
         limit={limit}
         onLimitChange={handleLimitChange}
         actions={
-          <button
-            type="button"
-            onClick={() => setClearOpen(true)}
-            disabled={clearSubmitting || loading}
-            className="btn-secondary w-full border-red-500/45 bg-red-950/35 text-red-100 hover:border-red-400/60 hover:bg-red-950/55 sm:w-auto"
-          >
-            {clearSubmitting ? "Clearing..." : "Clear All Sessions"}
-          </button>
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={() => setClearOpen(true)}
+              disabled={clearSubmitting || loading}
+              className="btn-secondary w-full border-red-500/45 bg-red-950/35 text-red-100 hover:border-red-400/60 hover:bg-red-950/55 sm:w-auto"
+            >
+              {clearSubmitting ? "Clearing..." : "Clear All Sessions"}
+            </button>
+            <button
+              type="button"
+              onClick={openCreate}
+              disabled={loading || formSubmitting}
+              className="btn-primary w-full sm:w-auto"
+            >
+              Add session
+            </button>
+          </div>
         }
       />
 
@@ -444,7 +444,7 @@ export default function SessionsPage() {
         onNext={() => setPage((current) => Math.min(totalPages, current + 1))}
       />
 
-      <section className="card-float space-y-5">
+      <section className="card-float space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300/90">
             Active slots right now

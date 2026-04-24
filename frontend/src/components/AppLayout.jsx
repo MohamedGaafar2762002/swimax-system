@@ -82,6 +82,8 @@ export default function AppLayout() {
               </span>
             </NavLink>
 
+            <div className="mt-5 h-px w-full bg-white/10" />
+
             {/* Links */}
             <div className="mt-6 space-y-1.5">
               <NavLink to="/" end className={navLinkClass}>Home</NavLink>

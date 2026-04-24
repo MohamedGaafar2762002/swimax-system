@@ -63,8 +63,8 @@ export default function SessionForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid gap-3 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor="session-coach" className="block text-sm font-medium text-slate-300">
             Coach
@@ -88,7 +88,7 @@ export default function SessionForm({
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <label className="block text-sm font-medium text-slate-300">Recurring schedule</label>
           <button
@@ -102,7 +102,7 @@ export default function SessionForm({
         {schedule.map((slot, index) => (
           <div
             key={`${index}-${slot.day}-${slot.startTime}-${slot.endTime}`}
-            className="grid gap-3 rounded-2xl border border-sky-500/15 bg-slate-950/50 p-4 shadow-inner sm:grid-cols-[1fr_1fr_1fr_auto]"
+            className="grid gap-2.5 rounded-2xl border border-sky-500/15 bg-slate-950/50 p-3.5 shadow-inner sm:grid-cols-[1fr_1fr_1fr_auto]"
           >
             <select
               value={slot.day}
@@ -146,7 +146,7 @@ export default function SessionForm({
           <label className="block text-sm font-medium text-slate-300">Trainees</label>
           <span className="text-xs text-slate-500">Unavailable = assigned to another group</span>
         </div>
-        <div className="mt-3 max-h-64 overflow-y-auto rounded-2xl border border-slate-700/50 bg-slate-950/40 p-3">
+        <div className="mt-2.5 max-h-64 overflow-y-auto rounded-2xl border border-slate-700/50 bg-slate-950/40 p-2.5">
           {trainees.length === 0 ? (
             <p className="text-sm text-slate-500">No trainees available yet.</p>
           ) : (
@@ -184,7 +184,7 @@ export default function SessionForm({
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-end gap-3 pt-2">
+      <div className="flex flex-wrap justify-end gap-2 pt-1">
         <button
           type="button"
           onClick={onCancel}
