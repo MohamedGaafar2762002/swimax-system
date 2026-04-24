@@ -255,7 +255,7 @@ export default function AttendancePage() {
   }
 
   return (
-    <div className="animate-fade-in space-y-10">
+    <div className="animate-fade-in space-y-5 md:space-y-6">
 
       {error && (
         <div className="rounded-2xl border border-amber-500/35 bg-amber-950/35 px-4 py-3 text-sm text-amber-100">
@@ -268,33 +268,11 @@ export default function AttendancePage() {
         </div>
       )}
 
-      <div className="flex flex-wrap gap-3">
-        <button type="button" onClick={handleExportAttendance} className="btn-primary">
-          Export attendance CSV
-        </button>
-
-        <button
-          type="button"
-          onClick={handleExportPayroll}
-          className="rounded-2xl border border-cyan-500/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-100 shadow-md transition duration-200 hover:scale-[1.02] hover:bg-cyan-500/20"
-        >
-          Export payroll CSV
-        </button>
-      </div>
-
       <section className="toolbar-strip">
         <div className="flex w-full items-center justify-between gap-3">
           <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Filters</h2>
-          <button
-            type="button"
-            onClick={() => setClearOpen(true)}
-            disabled={clearSubmitting || loading || summaryLoading}
-            className="btn-secondary border-red-500/45 bg-red-950/35 text-red-100 hover:border-red-400/60 hover:bg-red-950/55"
-          >
-            {clearSubmitting ? "Clearing..." : "Clear Attendance Data"}
-          </button>
         </div>
-        <div className="grid w-full gap-4 md:grid-cols-6">
+        <div className="grid w-full gap-3 md:grid-cols-6">
           <label className="space-y-2 text-sm">
             <span className="text-slate-400">Start date</span>
             <input
@@ -367,6 +345,27 @@ export default function AttendancePage() {
               <option value={50}>50</option>
             </select>
           </label>
+        </div>
+
+        <div className="flex w-full flex-col gap-2 border-t border-white/5 pt-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
+          <button type="button" onClick={handleExportAttendance} className="btn-primary w-full sm:w-auto">
+            Export attendance CSV
+          </button>
+          <button
+            type="button"
+            onClick={handleExportPayroll}
+            className="btn-secondary w-full border-cyan-500/35 bg-cyan-500/10 text-cyan-100 hover:bg-cyan-500/15 sm:w-auto"
+          >
+            Export payroll CSV
+          </button>
+          <button
+            type="button"
+            onClick={() => setClearOpen(true)}
+            disabled={clearSubmitting || loading || summaryLoading}
+            className="btn-secondary w-full border-red-500/45 bg-red-950/35 text-red-100 hover:border-red-400/60 hover:bg-red-950/55 sm:w-auto"
+          >
+            {clearSubmitting ? "Clearing..." : "Clear Attendance Data"}
+          </button>
         </div>
       </section>
 

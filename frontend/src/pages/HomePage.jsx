@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import api from "../services/api.js";
+import { parseTimeToMinutes } from "../utils/localDateTime.js";
 
 function coachName(session) {
   const coach = session?.coachId;
@@ -7,18 +8,62 @@ function coachName(session) {
   return "—";
 }
 
+function traineeCountNumber(session) {
+  if (typeof session?.traineeCount === "number") return session.traineeCount;
+  if (typeof session?.traineesCount === "number") return session.traineesCount;
+  if (typeof session?.traineesLength === "number") return session.traineesLength;
+  if (Array.isArray(session?.trainees)) return session.trainees.length;
+  if (Array.isArray(session?.traineeIds)) return session.traineeIds.length;
+  if (Array.isArray(session?.traineesIds)) return session.traineesIds.length;
+  return 0;
+}
+
 function traineeCountLabel(session) {
-  const trainees = Array.isArray(session?.trainees) ? session.trainees : [];
-  const count = trainees.length;
+  const count = traineeCountNumber(session);
   if (count === 0) return "No trainees";
   if (count === 1) return "1 trainee";
   return `${count} trainees`;
+}
+
+function dayNameFromDate(date) {
+  return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][date.getDay()];
+}
+
+function computeActiveSessionsLocal(sessions) {
+  const now = new Date();
+  const today = dayNameFromDate(now);
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+  const results = [];
+  for (const session of sessions) {
+    const slots = Array.isArray(session?.schedule) ? session.schedule : [];
+    for (const slot of slots) {
+      if (slot?.day !== today) continue;
+      const start = parseTimeToMinutes(slot?.startTime);
+      const end = parseTimeToMinutes(slot?.endTime);
+      if (start === null || end === null) continue;
+      // Inclusive end (requested): start <= now <= end
+      if (start <= nowMinutes && nowMinutes <= end) {
+        results.push({
+          ...session,
+          currentSlot: {
+            day: slot.day,
+            startTime: slot.startTime,
+            endTime: slot.endTime,
+          },
+        });
+        break;
+      }
+    }
+  }
+  return results;
 }
 
 export default function HomePage() {
   const [currentSessions, setCurrentSessions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [upcomingSession, setUpcomingSession] = useState(null);
+  const [fallbackSessions, setFallbackSessions] = useState([]);
 
   const [stats, setStats] = useState({
     coaches: 0,
@@ -62,6 +107,7 @@ export default function HomePage() {
 
         setCurrentSessions(currentRes.data?.current ?? []);
         setUpcomingSession(upcomingRes.data?.upcoming ?? null);
+        setFallbackSessions([]);
         setSessionsError(null);
       } catch {
         if (!cancelled) {
@@ -79,6 +125,29 @@ export default function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadFallbackIfNeeded() {
+      if (currentSessions.length) return;
+      try {
+        const { data } = await api.get("/api/sessions", {
+          params: { page: 1, limit: 250, sortBy: "createdAt", order: "desc" },
+        });
+        if (cancelled) return;
+        const list = Array.isArray(data?.sessions) ? data.sessions : [];
+        setFallbackSessions(computeActiveSessionsLocal(list));
+      } catch {
+        if (!cancelled) setFallbackSessions([]);
+      }
+    }
+
+    loadFallbackIfNeeded();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentSessions.length]);
+
   function nextSession() {
     setCurrentIndex((prev) =>
       currentSessions.length ? (prev + 1) % currentSessions.length : 0
@@ -93,7 +162,12 @@ export default function HomePage() {
     );
   }
 
-  const activeSession = currentSessions[currentIndex];
+  const effectiveCurrentSessions = currentSessions.length ? currentSessions : fallbackSessions;
+  const activeSession = effectiveCurrentSessions[currentIndex];
+  const upcomingTraineesCount = useMemo(
+    () => traineeCountNumber(upcomingSession),
+    [upcomingSession],
+  );
 
   return (
     <div className="relative animate-fade-in space-y-5">
@@ -151,9 +225,18 @@ export default function HomePage() {
               </div>
 
               <div className="flex justify-between">
-                <span className="text-slate-400">Trainees</span>
+                <span className="text-slate-400">No. of trainees</span>
                 <span className="text-slate-100 font-semibold">
                   {traineeCountLabel(activeSession)}
+                </span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-slate-400">Slot</span>
+                <span className="text-slate-100 font-semibold">
+                  {activeSession.currentSlot
+                    ? `${activeSession.currentSlot.day} ${activeSession.currentSlot.startTime} – ${activeSession.currentSlot.endTime}`
+                    : "—"}
                 </span>
               </div>
             </div>
@@ -176,6 +259,13 @@ export default function HomePage() {
                 <span className="text-slate-400">Coach</span>
                 <span className="text-slate-100 font-semibold">
                   {coachName(upcomingSession)}
+                </span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-slate-400">No. of trainees</span>
+                <span className="text-slate-100 font-semibold">
+                  {upcomingTraineesCount}
                 </span>
               </div>
 

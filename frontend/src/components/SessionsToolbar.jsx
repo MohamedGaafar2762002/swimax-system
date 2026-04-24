@@ -25,7 +25,7 @@ export default function SessionsToolbar({
           autoComplete="off"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-end">
+      <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-1 sm:flex-wrap sm:items-end">
         <div>
           <label htmlFor="session-sort" className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
             Sort by
@@ -37,6 +37,7 @@ export default function SessionsToolbar({
             className="input-field-select mt-2 sm:w-44"
           >
             <option value="createdAt">Created</option>
+            <option value="traineeCount">No. of trainees</option>
           </select>
         </div>
         <div>
@@ -68,7 +69,7 @@ export default function SessionsToolbar({
             <option value="50">50</option>
           </select>
         </div>
-        {actions ? <div className="col-span-2 sm:col-span-1 sm:ml-2">{actions}</div> : null}
+        {actions ? <div className="col-span-2 sm:ml-auto">{actions}</div> : null}
       </div>
     </div>
   );

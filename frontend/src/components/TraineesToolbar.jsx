@@ -25,7 +25,7 @@ export default function TraineesToolbar({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
+      <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
             Sort by

@@ -379,6 +379,17 @@ export default function SessionsPage() {
         ? "No sessions yet. Create your first session to start scheduling."
         : null;
 
+  const visibleSessions = useMemo(() => {
+    if (sortBy !== "traineeCount") return sessions;
+    const copy = [...sessions];
+    copy.sort((a, b) => {
+      const aCount = Array.isArray(a?.trainees) ? a.trainees.length : 0;
+      const bCount = Array.isArray(b?.trainees) ? b.trainees.length : 0;
+      return order === "asc" ? aCount - bCount : bCount - aCount;
+    });
+    return copy;
+  }, [sessions, sortBy, order]);
+
   return (
     <div className="animate-fade-in space-y-4 md:space-y-5">
       {error && (
@@ -424,7 +435,7 @@ export default function SessionsPage() {
       />
 
       <SessionTable
-        sessions={sessions}
+        sessions={visibleSessions}
         loading={loading}
         onEdit={openEdit}
         onDelete={openDelete}

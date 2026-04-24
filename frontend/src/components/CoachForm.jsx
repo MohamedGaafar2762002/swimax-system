@@ -64,65 +64,58 @@ export default function CoachForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-slate-300">
-          Coach photo <span className="text-slate-500">(optional)</span>
-        </label>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-slate-300">
+            Coach photo <span className="text-slate-500">(optional)</span>
+          </label>
 
-        <div className="mt-2 flex items-center gap-4">
-          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-slate-800 to-slate-900 shadow-inner ring-1 ring-sky-400/10">
-            {preview ? (
-              <img
-                src={preview}
-                alt=""
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <span className="text-xs text-slate-500">No photo</span>
-            )}
+          <div className="mt-2 flex flex-wrap items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-slate-800 to-slate-900 shadow-inner ring-1 ring-sky-400/10">
+              {preview ? (
+                <img src={preview} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="text-xs text-slate-500">No photo</span>
+              )}
+            </div>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="text-sm text-slate-400 file:mr-3 file:rounded-xl file:border-0 file:bg-sky-500/20 file:px-3 file:py-2 file:text-sm file:font-medium file:text-sky-200 hover:file:bg-sky-500/30"
+            />
           </div>
+        </div>
 
+        <div>
+          <label className="block text-sm font-medium text-slate-300">Name</label>
+          <input required value={name} onChange={(e) => setName(e.target.value)} className="input-field" />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-300">Age</label>
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="text-sm text-slate-400 file:mr-3 file:rounded-xl file:border-0 file:bg-sky-500/20 file:px-3 file:py-2 file:text-sm file:font-medium file:text-sky-200 hover:file:bg-sky-500/30"
+            type="number"
+            min={0}
+            required
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            className="input-field"
           />
         </div>
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-300">Name</label>
-        <input
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="input-field"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-slate-300">Age</label>
-        <input
-          type="number"
-          min={0}
-          required
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          className="input-field"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-slate-300">
-          Bio <span className="text-slate-500">(optional)</span>
-        </label>
-        <textarea
-          rows={3}
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          className="input-field min-h-[5rem] resize-y"
-        />
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-slate-300">
+            Bio <span className="text-slate-500">(optional)</span>
+          </label>
+          <textarea
+            rows={3}
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            className="input-field min-h-[5rem] resize-y"
+          />
+        </div>
       </div>
 
       <div className="flex flex-wrap justify-end gap-2 pt-1">

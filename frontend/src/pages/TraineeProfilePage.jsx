@@ -89,13 +89,13 @@ export default function TraineeProfilePage() {
   const notesIsArabic = isArabic(notesText);
 
   return (
-    <div className="animate-fade-in space-y-8">
+    <div className="animate-fade-in space-y-4 md:space-y-5">
       <Link to="/trainees" className="link-back">
         ← Back to trainees
       </Link>
 
       <div className="card-float overflow-hidden p-0">
-        <div className="border-b border-cyan-500/10 bg-gradient-to-r from-cyan-500/10 via-transparent to-sky-500/10 px-8 py-6">
+        <div className="border-b border-cyan-500/10 bg-gradient-to-r from-cyan-500/10 via-transparent to-sky-500/10 px-5 py-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300/90">
             SWIMAX · Trainee
           </p>
@@ -104,9 +104,9 @@ export default function TraineeProfilePage() {
           </h1>
         </div>
 
-        <div className="flex flex-col gap-6 p-8 md:grid md:grid-cols-[260px_minmax(0,1fr)] md:items-stretch">
+        <div className="flex flex-col gap-4 p-5 md:grid md:grid-cols-[220px_minmax(0,1fr)] md:items-start">
           <div className="mx-auto w-full md:mx-0 md:self-start">
-            <div className="relative h-full w-full overflow-hidden rounded-2xl border border-cyan-500/25 shadow-glow-sm ring-2 ring-cyan-400/10 md:h-[306px]">
+            <div className="relative h-[240px] w-full overflow-hidden rounded-2xl border border-cyan-500/25 shadow-glow-sm ring-2 ring-cyan-400/10 md:h-[260px]">
               {imageUrl ? (
                 <img
                   src={imageUrl}

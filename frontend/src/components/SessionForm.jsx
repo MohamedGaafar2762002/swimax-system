@@ -63,124 +63,128 @@ export default function SessionForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <label htmlFor="session-coach" className="block text-sm font-medium text-slate-300">
-            Coach
-          </label>
-          <select
-            id="session-coach"
-            required
-            value={coachId}
-            onChange={(e) => setCoachId(e.target.value)}
-            className="input-field-select"
-          >
-            <option value="" disabled>
-              Select a coach
-            </option>
-            {coaches.map((coach) => (
-              <option key={coach._id} value={coach._id}>
-                {coach.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <label className="block text-sm font-medium text-slate-300">Recurring schedule</label>
-          <button
-            type="button"
-            onClick={addScheduleSlot}
-            className="btn-ghost rounded-xl px-3 py-1.5 text-xs"
-          >
-            + Add day
-          </button>
-        </div>
-        {schedule.map((slot, index) => (
-          <div
-            key={`${index}-${slot.day}-${slot.startTime}-${slot.endTime}`}
-            className="grid gap-2.5 rounded-2xl border border-sky-500/15 bg-slate-950/50 p-3.5 shadow-inner sm:grid-cols-[1fr_1fr_1fr_auto]"
-          >
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid gap-4 md:grid-cols-2 md:items-start">
+        {/* Left: coach + schedule */}
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="session-coach" className="block text-sm font-medium text-slate-300">
+              Coach
+            </label>
             <select
-              value={slot.day}
-              onChange={(e) => updateScheduleSlot(index, "day", e.target.value)}
-              className="input-field-select !mt-0"
+              id="session-coach"
+              required
+              value={coachId}
+              onChange={(e) => setCoachId(e.target.value)}
+              className="input-field-select"
             >
-              {DAYS.map((day) => (
-                <option key={day} value={day}>
-                  {day}
+              <option value="" disabled>
+                Select a coach
+              </option>
+              {coaches.map((coach) => (
+                <option key={coach._id} value={coach._id}>
+                  {coach.name}
                 </option>
               ))}
             </select>
-            <input
-              type="time"
-              required
-              value={slot.startTime}
-              onChange={(e) => updateScheduleSlot(index, "startTime", e.target.value)}
-              className="input-field !mt-0"
-            />
-            <input
-              type="time"
-              required
-              value={slot.endTime}
-              onChange={(e) => updateScheduleSlot(index, "endTime", e.target.value)}
-              className="input-field !mt-0"
-            />
-            <button
-              type="button"
-              onClick={() => removeScheduleSlot(index)}
-              disabled={schedule.length <= 1}
-              className="rounded-xl border border-slate-600 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-800 disabled:opacity-40"
-            >
-              Remove
-            </button>
           </div>
-        ))}
-      </div>
 
-      <div>
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <label className="block text-sm font-medium text-slate-300">Trainees</label>
-          <span className="text-xs text-slate-500">Unavailable = assigned to another group</span>
-        </div>
-        <div className="mt-2.5 max-h-64 overflow-y-auto rounded-2xl border border-slate-700/50 bg-slate-950/40 p-2.5">
-          {trainees.length === 0 ? (
-            <p className="text-sm text-slate-500">No trainees available yet.</p>
-          ) : (
-            <div className="space-y-2">
-              {trainees.map((trainee) => {
-                const disabled = Boolean(trainee.unavailable && !selectedSet.has(trainee._id));
-                return (
-                  <label
-                    key={trainee._id}
-                    className={`flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-2.5 transition duration-200 ${
-                      disabled
-                        ? "border-slate-800/80 bg-slate-900/30 opacity-60"
-                        : "border-slate-700/60 bg-slate-900/50 hover:border-sky-500/25"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedSet.has(trainee._id)}
-                      disabled={disabled || submitting}
-                      onChange={() => handleTraineeToggle(trainee._id)}
-                      className="mt-1 rounded border-slate-600 text-sky-500 focus:ring-sky-500/40"
-                    />
-                    <span className="min-w-0">
-                      <span className="block text-sm font-medium text-slate-100">{trainee.name}</span>
-                      <span className="block text-xs text-slate-400">
-                        {trainee.level}
-                        {disabled && trainee.sessionLabel ? ` · ${trainee.sessionLabel}` : ""}
-                      </span>
-                    </span>
-                  </label>
-                );
-              })}
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label className="block text-sm font-medium text-slate-300">Recurring schedule</label>
+              <button
+                type="button"
+                onClick={addScheduleSlot}
+                className="btn-ghost rounded-xl px-3 py-1.5 text-xs"
+              >
+                + Add day
+              </button>
             </div>
-          )}
+            {schedule.map((slot, index) => (
+              <div
+                key={`${index}-${slot.day}-${slot.startTime}-${slot.endTime}`}
+                className="grid gap-2.5 rounded-2xl border border-sky-500/15 bg-slate-950/50 p-3.5 shadow-inner sm:grid-cols-[1fr_1fr_1fr_auto]"
+              >
+                <select
+                  value={slot.day}
+                  onChange={(e) => updateScheduleSlot(index, "day", e.target.value)}
+                  className="input-field-select !mt-0"
+                >
+                  {DAYS.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="time"
+                  required
+                  value={slot.startTime}
+                  onChange={(e) => updateScheduleSlot(index, "startTime", e.target.value)}
+                  className="input-field !mt-0"
+                />
+                <input
+                  type="time"
+                  required
+                  value={slot.endTime}
+                  onChange={(e) => updateScheduleSlot(index, "endTime", e.target.value)}
+                  className="input-field !mt-0"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeScheduleSlot(index)}
+                  disabled={schedule.length <= 1}
+                  className="rounded-xl border border-slate-600 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-800 disabled:opacity-40"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: trainees */}
+        <div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <label className="block text-sm font-medium text-slate-300">Trainees</label>
+            <span className="text-xs text-slate-500">Unavailable = assigned to another group</span>
+          </div>
+          <div className="mt-2.5 max-h-64 overflow-y-auto rounded-2xl border border-slate-700/50 bg-slate-950/40 p-2.5">
+            {trainees.length === 0 ? (
+              <p className="text-sm text-slate-500">No trainees available yet.</p>
+            ) : (
+              <div className="space-y-2">
+                {trainees.map((trainee) => {
+                  const disabled = Boolean(trainee.unavailable && !selectedSet.has(trainee._id));
+                  return (
+                    <label
+                      key={trainee._id}
+                      className={`flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-2.5 transition duration-200 ${
+                        disabled
+                          ? "border-slate-800/80 bg-slate-900/30 opacity-60"
+                          : "border-slate-700/60 bg-slate-900/50 hover:border-sky-500/25"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedSet.has(trainee._id)}
+                        disabled={disabled || submitting}
+                        onChange={() => handleTraineeToggle(trainee._id)}
+                        className="mt-1 rounded border-slate-600 text-sky-500 focus:ring-sky-500/40"
+                      />
+                      <span className="min-w-0">
+                        <span className="block text-sm font-medium text-slate-100">{trainee.name}</span>
+                        <span className="block text-xs text-slate-400">
+                          {trainee.level}
+                          {disabled && trainee.sessionLabel ? ` · ${trainee.sessionLabel}` : ""}
+                        </span>
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

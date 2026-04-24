@@ -77,13 +77,13 @@ export default function CoachProfilePage() {
   const bioIsArabic = isArabic(bioText);
 
   return (
-    <div className="animate-fade-in space-y-8">
+    <div className="animate-fade-in space-y-4 md:space-y-5">
       <Link to="/coaches" className="link-back">
         ← Back to coaches
       </Link>
 
       <div className="card-float overflow-hidden p-0">
-        <div className="border-b border-sky-500/10 bg-gradient-to-r from-sky-500/10 via-transparent to-cyan-500/10 px-8 py-6">
+        <div className="border-b border-sky-500/10 bg-gradient-to-r from-sky-500/10 via-transparent to-cyan-500/10 px-5 py-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300/90">
             SWIMAX · Coach
           </p>
@@ -92,9 +92,9 @@ export default function CoachProfilePage() {
           </h1>
         </div>
 
-        <div className="flex flex-col gap-6 p-8 md:grid md:grid-cols-[260px_minmax(0,1fr)] md:items-stretch">
-          <div className="mx-auto w-full md:mx-0 md:h-full md:self-stretch">
-            <div className="relative h-full w-full overflow-hidden rounded-2xl border border-sky-500/20 shadow-glow-sm">
+        <div className="flex flex-col gap-4 p-5 md:grid md:grid-cols-[220px_minmax(0,1fr)] md:items-start">
+          <div className="mx-auto w-full md:mx-0">
+            <div className="relative h-[240px] w-full overflow-hidden rounded-2xl border border-sky-500/20 shadow-glow-sm md:h-[260px]">
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
 
               {imageUrl ? (
