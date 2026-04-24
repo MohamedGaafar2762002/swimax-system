@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
+import UnderwaterBackground from "../components/UnderwaterBackground.jsx";
+
 
 function getErrorMessage(err) {
   const msg = err?.response?.data?.message;
@@ -43,82 +45,181 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-6">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(56,189,248,0.24),transparent_48%)]"
-        aria-hidden
-      />
-      <div className="relative w-full max-w-sm animate-fade-in">
-        <div className="relative overflow-hidden rounded-[1.35rem] border border-sky-300/25 bg-gradient-to-b from-sky-900/45 via-slate-900/85 to-slate-950/95 p-6 shadow-[0_0_40px_rgba(56,189,248,0.22)] backdrop-blur-xl md:p-7">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(125,211,252,0.18),transparent_55%)]" />
-          <div className="text-center">
-            <div className="mx-auto mb-4 flex h-[4.5rem] w-24 items-center justify-center rounded-2xl border border-sky-300/35 bg-gradient-to-br from-sky-400/25 to-cyan-300/15 shadow-inner shadow-sky-400/25">
-              <img
-                src="/logo.jpeg"
-                alt="SWIMAX"
-                className="h-12 w-20 rounded-xl object-cover"
-              />
+    <div className="relative flex h-screen w-screen items-center justify-center overflow-hidden px-5">
+      <UnderwaterBackground />
+
+      <div className="relative z-10 w-full max-w-[440px] animate-fade-in">
+        <div className="relative overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-[#0d2240]/90 to-[#08162c]/95 px-7 pb-7 pt-7 shadow-[0_0_0_1px_rgba(0,196,255,0.06),0_8px_32px_rgba(0,0,0,0.5),0_0_80px_rgba(0,196,255,0.08),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-2xl">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(0,229,255,0.10),transparent_60%)]" aria-hidden />
+
+          {/* Brand */}
+          <div className="relative mb-6 flex flex-col items-center gap-1.5 text-center">
+            <div className="mb-1 flex h-16 w-16 items-center justify-center rounded-full bg-[radial-gradient(circle_at_50%_40%,rgba(0,196,255,0.15),transparent_70%)]">
+              {/* Wave logo (visual only) */}
+              <svg viewBox="0 0 48 48" fill="none" className="h-12 w-12" aria-hidden="true">
+                <path
+                  d="M6 30 Q12 22 18 30 Q24 38 30 30 Q36 22 42 30"
+                  stroke="url(#waveGrad)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <path
+                  d="M6 36 Q12 28 18 36 Q24 44 30 36 Q36 28 42 36"
+                  stroke="url(#waveGrad2)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  fill="none"
+                  opacity="0.5"
+                />
+                <circle cx="24" cy="16" r="7" fill="url(#circleGrad)" />
+                <path
+                  d="M20 14 L24 10 L28 14"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+                <defs>
+                  <linearGradient id="waveGrad" x1="6" y1="30" x2="42" y2="30" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#00c4ff" />
+                    <stop offset="1" stopColor="#00e5ff" />
+                  </linearGradient>
+                  <linearGradient id="waveGrad2" x1="6" y1="36" x2="42" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#0090c8" />
+                    <stop offset="1" stopColor="#00c4ff" />
+                  </linearGradient>
+                  <radialGradient id="circleGrad" cx="50%" cy="40%" r="50%">
+                    <stop stopColor="#00e5ff" />
+                    <stop offset="1" stopColor="#0080b0" />
+                  </radialGradient>
+                </defs>
+              </svg>
             </div>
-            <h1 className="text-3xl font-black uppercase tracking-[0.22em] text-cyan-100">
+
+            <h1 className="text-[2.4rem] font-black leading-none tracking-[0.18em] text-cyan-200 drop-shadow-[0_0_30px_rgba(0,229,255,0.35)]">
               SWIMAX
             </h1>
-            <p className="mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-sky-100/70">
+            <p className="text-[0.78rem] font-normal uppercase tracking-[0.22em] text-slate-200/65">
               Swimming Academy
             </p>
           </div>
-          <form className="relative mt-6 space-y-4" onSubmit={handleSubmit}>
+
+          {/* Divider */}
+          <div className="mb-4 h-px w-full bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
+
+          {/* Form */}
+          <form className="relative flex flex-col gap-4" onSubmit={handleSubmit}>
+            {/* Error banner */}
             {error && (
-              <div className="rounded-xl border border-amber-500/35 bg-amber-950/35 px-3 py-2 text-xs text-amber-100">
-                {error}
+              <div
+                className="flex items-center gap-2.5 rounded-[10px] border border-rose-400/30 bg-rose-400/10 px-3.5 py-2.5 text-[0.85rem] text-rose-200"
+                role="alert"
+              >
+                <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px] flex-shrink-0 text-rose-300" aria-hidden="true">
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M10 6v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="10" cy="14" r="1" fill="currentColor" />
+                </svg>
+                <span className="leading-snug">{error}</span>
               </div>
             )}
-            <div className="space-y-3.5">
-              <div>
+
+            <div className="flex flex-col gap-[18px]">
+              {/* Username */}
+              <div className="flex flex-col gap-1.5">
                 <label
                   htmlFor="username"
-                  className="block text-[0.62rem] font-bold uppercase tracking-[0.18em] text-sky-100/80"
+                  className="pl-0.5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-200/65"
                 >
                   Username
                 </label>
-                <input
-                  id="username"
-                  name="username"
-                  autoComplete="username"
-                  required
-                  placeholder="Enter your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-sky-300/20 bg-slate-900/55 px-3 py-2 text-sm text-slate-100 outline-none transition duration-200 placeholder:text-slate-400/70 focus:border-sky-300/55 focus:ring-2 focus:ring-sky-300/25"
-                />
+                <div className="relative flex items-center">
+                  <span className="pointer-events-none absolute left-[14px] text-cyan-300/55">
+                    <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px]" aria-hidden="true">
+                      <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" />
+                      <path
+                        d="M3 17c0-3.866 3.134-7 7-7s7 3.134 7 7"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    id="username"
+                    name="username"
+                    autoComplete="username"
+                    required
+                    placeholder="Enter your username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    disabled={submitting}
+                    className="w-full rounded-xl border border-cyan-300/15 bg-sky-950/60 px-[44px] py-3 pl-[42px] text-[0.95rem] text-slate-100 outline-none transition placeholder:text-cyan-200/25 focus:border-cyan-300/55 focus:bg-sky-950/70 focus:ring-[3px] focus:ring-cyan-300/10 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
               </div>
-              <div>
+
+              {/* Password */}
+              <div className="flex flex-col gap-[7px]">
                 <label
                   htmlFor="password"
-                  className="block text-[0.62rem] font-bold uppercase tracking-[0.18em] text-sky-100/80"
+                  className="pl-0.5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-slate-200/65"
                 >
                   Password
                 </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-sky-300/20 bg-slate-900/55 px-3 py-2 text-sm text-slate-100 outline-none transition duration-200 placeholder:text-slate-400/70 focus:border-sky-300/55 focus:ring-2 focus:ring-sky-300/25"
-                />
+                <div className="relative flex items-center">
+                  <span className="pointer-events-none absolute left-[14px] text-cyan-300/55">
+                    <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px]" aria-hidden="true">
+                      <rect x="4" y="9" width="12" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                      <path d="M7 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <circle cx="10" cy="13.5" r="1.2" fill="currentColor" />
+                    </svg>
+                  </span>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={submitting}
+                    className="w-full rounded-xl border border-cyan-300/15 bg-sky-950/60 px-[44px] py-3 pl-[42px] pr-[44px] text-[0.95rem] text-slate-100 outline-none transition placeholder:text-cyan-200/25 focus:border-cyan-300/55 focus:bg-sky-950/70 focus:ring-[3px] focus:ring-cyan-300/10 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  {/* Visual-only toggle icon (no new state/logic) */}
+                  <span className="pointer-events-none absolute right-3 text-cyan-300/45">
+                    <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px]" aria-hidden="true">
+                      <path
+                        d="M2 10s3.5-6 8-6 8 6 8 6-3.5 6-8 6-8-6-8-6Z"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                      />
+                      <circle cx="10" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.4" />
+                    </svg>
+                  </span>
+                </div>
               </div>
             </div>
+
+            {/* Submit */}
             <button
               type="submit"
               disabled={submitting}
-              className="mt-1 w-full rounded-xl bg-gradient-to-r from-cyan-300 to-sky-300 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-[0_0_24px_rgba(103,232,249,0.4)] transition duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group relative mt-1 flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-[#00aadd] to-[#00e0ff] px-4 py-2.5 text-[0.95rem] font-semibold tracking-[0.06em] text-[#041622] shadow-[0_4px_20px_rgba(0,196,255,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(0,196,255,0.50)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-75"
             >
-              {submitting ? "Diving in..." : "Dive in"}
+              <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,transparent_50%,rgba(255,255,255,0.15))] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+              <span className="relative inline-flex items-center gap-2">
+                {submitting ? "Diving in..." : "Dive In"}
+                <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px] transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                  <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
             </button>
-            
+
+          
           </form>
         </div>
       </div>

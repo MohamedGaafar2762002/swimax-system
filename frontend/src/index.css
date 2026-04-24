@@ -136,3 +136,86 @@ body,
     @apply rounded-2xl border border-slate-700/50 bg-slate-950/40 p-5 transition duration-300 hover:border-sky-500/25 hover:shadow-glow-sm;
   }
 }
+
+@layer utilities {
+  @keyframes uw-bubble-rise {
+    0% {
+      transform: translate3d(0, 14vh, 0) scale(0.98);
+      filter: blur(0.2px);
+    }
+    70% {
+      filter: blur(0px);
+    }
+    100% {
+      transform: translate3d(var(--uw-drift, 0px), -120vh, 0) scale(1.05);
+      filter: blur(0.25px);
+    }
+  }
+
+  @keyframes uw-rays-drift {
+    0% {
+      transform: translate3d(-2%, 0, 0);
+      opacity: 0.45;
+    }
+    50% {
+      transform: translate3d(2%, 0, 0);
+      opacity: 0.55;
+    }
+    100% {
+      transform: translate3d(-2%, 0, 0);
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes uw-sparkle-float {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.28;
+    }
+    50% {
+      transform: translate3d(0, -12px, 0);
+      opacity: 0.38;
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.28;
+    }
+  }
+
+  .uw-bubble {
+    position: absolute;
+    bottom: -18vh;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.28), rgba(34, 211, 238, 0.08) 45%, rgba(2, 132, 199, 0.03) 70%, transparent 72%);
+    border: 1px solid rgba(34, 211, 238, 0.12);
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.06);
+    animation: uw-bubble-rise var(--uw-dur, 12s) linear var(--uw-delay, 0s) infinite;
+    will-change: transform;
+  }
+
+  .uw-rays {
+    background:
+      repeating-linear-gradient(
+        100deg,
+        rgba(0, 229, 255, 0.00) 0px,
+        rgba(0, 229, 255, 0.00) 44px,
+        rgba(0, 229, 255, 0.06) 60px,
+        rgba(0, 229, 255, 0.00) 92px
+      );
+    mask-image: radial-gradient(circle at 50% 0%, rgba(0,0,0,0.85), rgba(0,0,0,0.2) 55%, rgba(0,0,0,0) 78%);
+    -webkit-mask-image: radial-gradient(circle at 50% 0%, rgba(0,0,0,0.85), rgba(0,0,0,0.2) 55%, rgba(0,0,0,0) 78%);
+    filter: blur(1px);
+    animation: uw-rays-drift 10s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+
+  .uw-sparkle {
+    background:
+      radial-gradient(circle at 18% 28%, rgba(148, 213, 255, 0.14), transparent 45%),
+      radial-gradient(circle at 72% 36%, rgba(34, 211, 238, 0.12), transparent 42%),
+      radial-gradient(circle at 54% 68%, rgba(56, 189, 248, 0.10), transparent 44%),
+      radial-gradient(circle at 32% 78%, rgba(186, 230, 253, 0.08), transparent 46%);
+    animation: uw-sparkle-float 7.5s ease-in-out infinite;
+    filter: blur(0.2px);
+  }
+}
