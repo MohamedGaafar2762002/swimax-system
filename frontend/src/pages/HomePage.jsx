@@ -105,7 +105,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_35%_25%,rgba(34,211,238,0.10),transparent_55%)]" />
 
         <div className="relative">
-          <h1 className="text-[1.4rem] md:text-[1.9rem] font-black leading-[1.4] tracking-[0.12em] text-slate-100">
+          <h1 className="text-[1.2rem] md:text-[1.7rem] font-black leading-[1.4] tracking-[0.12em] text-slate-100">
             WELCOME BACK ,{" "}
             <span className="bg-gradient-to-r from-cyan-300 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(34,211,238,0.6)]">
               ADMIN
