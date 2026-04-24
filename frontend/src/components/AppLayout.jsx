@@ -58,7 +58,7 @@ export default function AppLayout() {
       <UnderwaterBackground />
 
       <div className="relative min-h-screen w-full">
-        {/* Sidebar (FIXED) */}
+        {/* Sidebar */}
         <aside
           ref={menuRef}
           className={[
@@ -68,11 +68,52 @@ export default function AppLayout() {
           ].join(" ")}
         >
           <div className="flex h-full flex-col px-4 py-5">
+
             {/* Logo */}
-            <NavLink to="/" className="flex items-center gap-3 rounded-2xl px-3 py-2.5 transition hover:bg-white/5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300/20 to-sky-300/10 ring-1 ring-cyan-300/15">
-                {/* icon */}
+            <NavLink
+              to="/"
+              className="flex items-center gap-3 rounded-2xl px-3 py-2.5 transition hover:bg-white/5"
+            >
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-300/20 to-sky-300/10 ring-1 ring-cyan-300/15">
+                <svg viewBox="0 0 48 48" fill="none" className="h-11 w-11" aria-hidden="true">
+                  <path
+                    d="M6 30 Q12 22 18 30 Q24 38 30 30 Q36 22 42 30"
+                    stroke="url(#waveGrad)"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M6 36 Q12 28 18 36 Q24 44 30 36 Q36 28 42 36"
+                    stroke="url(#waveGrad2)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    opacity="0.5"
+                  />
+                  <circle cx="24" cy="16" r="7" fill="url(#circleGrad)" />
+                  <path
+                    d="M20 14 L24 10 L28 14"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <defs>
+                    <linearGradient id="waveGrad" x1="6" y1="30" x2="42" y2="30">
+                      <stop stopColor="#00c4ff" />
+                      <stop offset="1" stopColor="#00e5ff" />
+                    </linearGradient>
+                    <linearGradient id="waveGrad2" x1="6" y1="36" x2="42" y2="36">
+                      <stop stopColor="#0090c8" />
+                      <stop offset="1" stopColor="#00c4ff" />
+                    </linearGradient>
+                    <radialGradient id="circleGrad" cx="50%" cy="40%" r="50%">
+                      <stop stopColor="#00e5ff" />
+                      <stop offset="1" stopColor="#0080b0" />
+                    </radialGradient>
+                  </defs>
+                </svg>
               </span>
+
               <span className="text-sm font-extrabold tracking-[0.28em] text-cyan-200">
                 SWIMAX
               </span>
@@ -87,7 +128,7 @@ export default function AppLayout() {
               <NavLink to="/attendance" className={navLinkClass}>Attendance</NavLink>
             </div>
 
-            {/* Bottom buttons */}
+            {/* Bottom */}
             <div className="mt-auto space-y-2 pt-6">
               <button
                 onClick={handleGoToChangePassword}
@@ -106,7 +147,7 @@ export default function AppLayout() {
           </div>
         </aside>
 
-        {/* Main content */}
+        {/* Main */}
         <div className="md:ml-[280px] min-w-0">
           <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/30 backdrop-blur-xl">
             <div className="flex items-center justify-between px-4 py-4 md:px-6">
