@@ -196,19 +196,15 @@ export default function CoachesPage() {
       : null;
 
   return (
-    <div className="animate-fade-in space-y-10">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <button type="button" onClick={openCreate} className="btn-primary shrink-0">
-          Add coach
-        </button>
-      </div>
-
+    <div className="animate-fade-in space-y-5">
+      {" "}
+      {/* 👈 قللنا المسافات */}
       {error && (
-        <div className="rounded-2xl border border-red-500/30 bg-red-950/35 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-xl border border-red-500/30 bg-red-950/30 px-3 py-2 text-xs text-red-100">
           {error}
         </div>
       )}
-
+      {/* 🔥 SEARCH FIRST */}
       <CoachesToolbar
         search={search}
         onSearchChange={setSearch}
@@ -219,7 +215,17 @@ export default function CoachesPage() {
         limit={limit}
         onLimitChange={handleLimitChange}
       />
-
+      {/* 🔥 BUTTON تحت السيرش */}
+      <div className="flex justify-start">
+        <button
+          type="button"
+          onClick={openCreate}
+          className="btn-primary px-5 py-2 text-sm rounded-xl"
+        >
+          Add coach
+        </button>
+      </div>
+      {/* 🔥 TABLE */}
       <CoachTable
         coaches={coaches}
         loading={loading}
@@ -230,7 +236,7 @@ export default function CoachesPage() {
         onSortColumn={handleSortColumn}
         emptyHint={emptyHint}
       />
-
+      {/* 🔥 PAGINATION */}
       <CoachesPagination
         currentPage={page}
         totalPages={totalPages}
@@ -240,17 +246,18 @@ export default function CoachesPage() {
         onPrev={() => setPage((p) => Math.max(1, p - 1))}
         onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
       />
-
+      {/* 🔥 FORM MODAL */}
       {formOpen && (
         <div
           className="modal-overlay z-[60]"
-          role="presentation"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) closeForm();
           }}
         >
-          <div className="modal-panel-lg">
-            <h2 className="mb-6 text-lg font-semibold text-white">
+          <div className="modal-panel-lg p-5">
+            {" "}
+            {/* 👈 padding أقل */}
+            <h2 className="mb-4 text-base font-semibold text-white">
               {formMode === "create" ? "New coach" : "Edit coach"}
             </h2>
             <CoachForm
@@ -271,7 +278,7 @@ export default function CoachesPage() {
           </div>
         </div>
       )}
-
+      {/* 🔥 DELETE MODAL */}
       <ConfirmModal
         open={deleteOpen}
         title="Delete coach?"

@@ -103,7 +103,7 @@ export default function HomePage() {
         <div className="absolute -right-10 -top-10 h-44 w-44 bg-cyan-400/10 blur-3xl rounded-full" />
         <div className="absolute -left-14 -bottom-14 h-56 w-56 bg-sky-400/10 blur-3xl rounded-full" />
 
-        <h1 className="text-[1.5rem] md:text-[2rem] font-black leading-[1.5] tracking-[0.15em] text-slate-100">
+        <h1 className="text-[1.5rem] md:text-[1.8rem] font-black leading-[1.5] tracking-[0.15em] text-slate-100">
           WELCOME BACK ,{" "}
           <span className="bg-gradient-to-r from-cyan-300 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(34,211,238,0.7)]">
             ADMIN
