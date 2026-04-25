@@ -47,9 +47,8 @@ export default function TraineeForm({
     setAddress(initialValues.address ?? "");
     setErrors({});
 
-    // ✅ هنا التعديل المهم
     if (initialValues.image) {
-      setPreview(initialValues.image); // ← سيبه زي ما هو (Cloudinary URL)
+      setPreview(initialValues.image);
     } else {
       setPreview(null);
     }
@@ -69,24 +68,28 @@ export default function TraineeForm({
     e.preventDefault();
     const nextErrors = {};
     const phoneRegex = /^[0-9+\-() ]{7,20}$/;
+
     if (!name.trim()) nextErrors.name = "Name is required";
     if (!age) nextErrors.age = "Age is required";
+
     if (!phone.trim()) nextErrors.phone = "Phone is required";
     else if (!phoneRegex.test(phone.trim())) {
       nextErrors.phone = "Phone format is invalid";
     }
+
     if (!address.trim()) nextErrors.address = "Address is required";
     else if (address.trim().length < 3) {
       nextErrors.address = "Address must be at least 3 characters";
     }
+
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
       return;
     }
+
     setErrors({});
 
     const formData = new FormData();
-
     formData.append("name", name.trim());
     formData.append("age", age === "" ? "" : Number(age));
     formData.append("level", level);
@@ -104,6 +107,8 @@ export default function TraineeForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid gap-3 md:grid-cols-2">
+
+        {/* IMAGE */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300">
             Photo <span className="text-slate-500">(optional)</span>
@@ -127,6 +132,7 @@ export default function TraineeForm({
           </div>
         </div>
 
+        {/* NAME */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300">Name</label>
           <input
@@ -138,9 +144,9 @@ export default function TraineeForm({
             }}
             className="input-field !px-3 !py-2"
           />
-          {errors.name ? <p className="mt-1 text-xs text-red-300">{errors.name}</p> : null}
         </div>
 
+        {/* AGE */}
         <div>
           <label className="block text-sm font-medium text-slate-300">Age</label>
           <input
@@ -157,12 +163,12 @@ export default function TraineeForm({
           {errors.age ? <p className="mt-1 text-xs text-red-300">{errors.age}</p> : null}
         </div>
 
+        {/* PHONE */}
         <div>
           <label className="block text-sm font-medium text-slate-300">Phone</label>
           <input
             type="tel"
             required
-            placeholder="Enter phone number"
             value={phone}
             onChange={(e) => {
               setPhone(e.target.value);
@@ -173,9 +179,14 @@ export default function TraineeForm({
           {errors.phone ? <p className="mt-1 text-xs text-red-300">{errors.phone}</p> : null}
         </div>
 
+        {/* 🔥 LEVEL */}
         <div>
           <label className="block text-sm font-medium text-slate-300">Level</label>
-          <select value={level} onChange={(e) => setLevel(e.target.value)} className="input-field-select !px-3 !py-2">
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="input-field-select !px-3 !py-2"
+          >
             {LEVELS.map((l) => (
               <option key={l} value={l}>
                 {l}
@@ -184,12 +195,12 @@ export default function TraineeForm({
           </select>
         </div>
 
-        <div className="md:col-span-2">
+        {/* 🔥 ADDRESS جنب Level */}
+        <div>
           <label className="block text-sm font-medium text-slate-300">Address</label>
           <input
             type="text"
             required
-            placeholder="Enter address"
             value={address}
             onChange={(e) => {
               setAddress(e.target.value);
@@ -200,6 +211,7 @@ export default function TraineeForm({
           {errors.address ? <p className="mt-1 text-xs text-red-300">{errors.address}</p> : null}
         </div>
 
+        {/* NOTES */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300">
             Notes <span className="text-slate-500">(optional)</span>
@@ -213,25 +225,26 @@ export default function TraineeForm({
         </div>
       </div>
 
+      {/* ACTIONS */}
       <div className="sticky bottom-[-1px] z-10 -mx-6 mt-4 border-t border-white/10 bg-[rgba(10,22,46,0.92)] px-6 py-3">
         <div className="flex flex-wrap justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={submitting}
-          className="btn-secondary disabled:opacity-50"
-        >
-          Cancel
-        </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={submitting}
+            className="btn-secondary disabled:opacity-50"
+          >
+            Cancel
+          </button>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="btn-primary disabled:opacity-50"
-        >
-          {submitting ? "Saving…" : submitLabel}
-        </button>
-      </div>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="btn-primary disabled:opacity-50"
+          >
+            {submitting ? "Saving…" : submitLabel}
+          </button>
+        </div>
       </div>
     </form>
   );
