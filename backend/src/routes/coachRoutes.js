@@ -1,6 +1,5 @@
 import { Router } from "express";
 import multer from "multer";
-import path from "path";
 import fs from "fs";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
@@ -16,25 +15,26 @@ const router = Router();
 
 /* ================= 🔥 MULTER CONFIG ================= */
 
-// 📁 folder
+// 📁 folder (احتياطي لو احتجته)
 const uploadDir = "uploads/coaches";
-
-// إنشاء الفولدر لو مش موجود
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// 📦 storage
+// 📦 Cloudinary storage
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: "swimax",
-    allowed_formats: ["jpg", "png", "jpeg"],
+  params: async (req, file) => {
+    return {
+      folder: "swimax",
+      allowed_formats: ["jpg", "png", "jpeg"],
+    };
   },
 });
 
-// 🛑 images only
+// 🛑 images only (اختياري بس سيبه)
 const fileFilter = (req, file, cb) => {
+  if (!file) return cb(null, true);
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
@@ -49,11 +49,13 @@ const upload = multer({
 
 /* ================= ROUTES ================= */
 
-// ✅ create (image optional)
-router.post("/", upload.single("image"), createCoach);
+// 🔥🔥🔥 الحل هنا: any() بدل single()
 
-// ✅ update (image optional)
-router.put("/:id", upload.single("image"), updateCoach);
+// ✅ create (يدعم image + باقي fields)
+router.post("/", upload.any(), createCoach);
+
+// ✅ update
+router.put("/:id", upload.any(), updateCoach);
 
 // GET
 router.get("/", getAllCoaches);
