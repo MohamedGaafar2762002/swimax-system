@@ -64,6 +64,8 @@ export async function createCoach(req, res, next) {
       // Debug multipart parsing in development
       // eslint-disable-next-line no-console
       console.log("[createCoach] req.body =", req.body);
+      // eslint-disable-next-line no-console
+      console.log("[createCoach] req.file =", req.file ? { fieldname: req.file.fieldname, originalname: req.file.originalname, path: req.file.path } : null);
     }
 
     const parsed = parseCoachPayload(req.body);
@@ -71,6 +73,10 @@ export async function createCoach(req, res, next) {
       return res.status(400).json({ message: parsed.error });
     }
     const data = parsed.data;
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("[createCoach] parsed.data =", data);
+    }
 
     if (req.file) {
       data.image = req.file.path; // URL
@@ -78,6 +84,10 @@ export async function createCoach(req, res, next) {
     }
 
     const coach = await Coach.create(data);
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("[createCoach] SAVED =", coach);
+    }
 
     res.status(201).json(coach);
   } catch (err) {
@@ -147,11 +157,17 @@ export async function updateCoach(req, res, next) {
       // Debug multipart parsing in development
       // eslint-disable-next-line no-console
       console.log("[updateCoach] req.body =", req.body);
+      // eslint-disable-next-line no-console
+      console.log("[updateCoach] req.file =", req.file ? { fieldname: req.file.fieldname, originalname: req.file.originalname, path: req.file.path } : null);
     }
 
     const parsed = parseCoachPayload(req.body);
     if (parsed.error) {
       return res.status(400).json({ message: parsed.error });
+    }
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("[updateCoach] parsed.data =", parsed.data);
     }
 
     const coach = await Coach.findById(req.params.id);
@@ -175,6 +191,10 @@ export async function updateCoach(req, res, next) {
     }
 
     await coach.save();
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("[updateCoach] SAVED =", coach);
+    }
 
     res.json(coach);
   } catch (err) {
