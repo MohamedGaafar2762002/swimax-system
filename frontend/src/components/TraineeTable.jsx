@@ -12,7 +12,11 @@ function SortHeader({ label, field, sortBy, order, onSort }) {
         }`}
       >
         <span>{label}</span>
-        {active && <span className="text-xs opacity-90">{order === "asc" ? "↑" : "↓"}</span>}
+        {active && (
+          <span className="text-xs opacity-90">
+            {order === "asc" ? "↑" : "↓"}
+          </span>
+        )}
       </button>
     </th>
   );
@@ -35,11 +39,8 @@ export default function TraineeTable({
           {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={index}
-              className="grid animate-pulse grid-cols-[1.1fr,0.55fr,1fr,1.2fr,0.8fr,0.9fr,0.95fr] gap-3 rounded-xl bg-slate-950/50 p-4"
+              className="grid animate-pulse grid-cols-[2fr,1fr,1fr,1.2fr] gap-3 rounded-xl bg-slate-950/50 p-4"
             >
-              <div className="h-4 rounded-lg bg-slate-800" />
-              <div className="h-4 rounded-lg bg-slate-800" />
-              <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
@@ -54,8 +55,12 @@ export default function TraineeTable({
   if (!trainees.length) {
     return (
       <div className="rounded-2xl border border-dashed border-sky-500/20 bg-slate-900/40 p-12 text-center shadow-inner">
-        <p className="text-base font-medium text-slate-100">No trainees yet.</p>
-        <p className="mt-2 text-sm text-slate-500">{emptyHint || "Add your first trainee to get started."}</p>
+        <p className="text-base font-medium text-slate-100">
+          No trainees yet.
+        </p>
+        <p className="mt-2 text-sm text-slate-500">
+          {emptyHint || "Add your first trainee to get started."}
+        </p>
       </div>
     );
   }
@@ -64,13 +69,24 @@ export default function TraineeTable({
     <div className="table-shell">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-700/50 text-left text-sm">
+          
+          {/* 🔥 HEADER */}
           <thead className="bg-slate-900/70">
             <tr>
-              <SortHeader label="Name" field="name" sortBy={sortBy} order={order} onSort={onSortColumn} />
-              <SortHeader label="Age" field="age" sortBy={sortBy} order={order} onSort={onSortColumn} />
-              <th className="px-4 py-4 font-medium text-slate-400">Phone</th>
-              <th className="px-4 py-4 font-medium text-slate-400">Address</th>
-              <SortHeader label="Level" field="level" sortBy={sortBy} order={order} onSort={onSortColumn} />
+              <SortHeader
+                label="Trainee"
+                field="name"
+                sortBy={sortBy}
+                order={order}
+                onSort={onSortColumn}
+              />
+              <SortHeader
+                label="Level"
+                field="level"
+                sortBy={sortBy}
+                order={order}
+                onSort={onSortColumn}
+              />
               <SortHeader
                 label="Created"
                 field="createdAt"
@@ -78,22 +94,52 @@ export default function TraineeTable({
                 order={order}
                 onSort={onSortColumn}
               />
-              <th className="px-4 py-4 text-center font-medium text-slate-400">Actions</th>
+              <th className="px-4 py-4 text-center font-medium text-slate-400">
+                Actions
+              </th>
             </tr>
           </thead>
+
+          {/* 🔥 BODY */}
           <tbody className="divide-y divide-slate-700/40">
             {trainees.map((t) => (
-              <tr key={t._id} className="table-row-hover odd:bg-slate-900/15 even:bg-transparent">
-                <td className="px-5 py-4 font-medium text-slate-100">{t.name}</td>
-                <td className="px-5 py-4 text-slate-300">{t.age}</td>
-                <td className="px-5 py-4 text-slate-300">{t.phone || "—"}</td>
-                <td className="max-w-[220px] truncate px-5 py-4 text-slate-300" title={t.address || ""}>
-                  {t.address || "—"}
+              <tr
+                key={t._id}
+                className="table-row-hover odd:bg-slate-900/15 even:bg-transparent"
+              >
+                
+                {/* 👤 Trainee */}
+                <td className="px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={t.image || "/placeholder.png"}
+                      alt=""
+                      className="h-10 w-10 rounded-xl object-cover ring-1 ring-sky-500/20"
+                    />
+                    <div>
+                      <p className="font-medium text-slate-100">
+                        {t.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        Trainee
+                      </p>
+                    </div>
+                  </div>
                 </td>
-                <td className="px-5 py-4 text-slate-300">{t.level}</td>
+
+                {/* 🏊 Level */}
+                <td className="px-5 py-4 text-slate-300">
+                  {t.level || "—"}
+                </td>
+
+                {/* 📅 Created */}
                 <td className="px-5 py-4 text-slate-500">
-                  {t.createdAt ? new Date(t.createdAt).toLocaleDateString() : "—"}
+                  {t.createdAt
+                    ? new Date(t.createdAt).toLocaleDateString()
+                    : "—"}
                 </td>
+
+                {/* ⚙️ Actions */}
                 <td className="px-5 py-4">
                   <div className="flex flex-wrap justify-end gap-2">
                     <Link
@@ -102,6 +148,7 @@ export default function TraineeTable({
                     >
                       Profile
                     </Link>
+
                     <button
                       type="button"
                       onClick={() => onEdit(t)}
@@ -109,6 +156,7 @@ export default function TraineeTable({
                     >
                       Edit
                     </button>
+
                     <button
                       type="button"
                       onClick={() => onDelete(t)}
@@ -118,6 +166,7 @@ export default function TraineeTable({
                     </button>
                   </div>
                 </td>
+
               </tr>
             ))}
           </tbody>
