@@ -218,7 +218,7 @@ export default function HomePage() {
       <section className="grid gap-4 md:grid-cols-2">
         {/* Current */}
         <div className="rounded-3xl border border-white/10 bg-[rgba(10,22,46,0.8)] p-5 backdrop-blur-xl shadow-lg hover:scale-[1.02] transition">
-          <h2 className="text-sm font-extrabold tracking-[0.2em] text-slate-100">
+          <h2 className="text-sm font-extrabold tracking-[0.1em] text-slate-100">
             IN THE POOL NOW
           </h2>
 
@@ -254,7 +254,7 @@ export default function HomePage() {
 
         {/* Upcoming */}
         <div className="rounded-3xl border border-white/10 bg-[rgba(10,22,46,0.8)] p-5 backdrop-blur-xl shadow-lg hover:scale-[1.02] transition">
-          <h2 className="text-sm font-extrabold tracking-[0.2em] text-slate-100">
+          <h2 className="text-sm font-extrabold tracking-[0.1em] text-slate-100">
             NEXT UP
           </h2>
 
