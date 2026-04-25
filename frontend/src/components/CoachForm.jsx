@@ -97,10 +97,6 @@ export default function CoachForm({
 
   return (
     <div className="space-y-4">
-
-     
-
-      {/* FORM */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-3 md:grid-cols-2">
 
@@ -152,7 +148,19 @@ export default function CoachForm({
             />
           </div>
 
-          {/* LEVEL */}
+          {/* PHONE */}
+          <div>
+            <label className="block text-sm font-medium text-slate-300">Phone</label>
+            <input
+              type="tel"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="input-field !px-3 !py-2"
+            />
+          </div>
+
+          {/* 🔥 LEVEL */}
           <div>
             <label className="block text-sm font-medium text-slate-300">
               Skill Level
@@ -168,19 +176,7 @@ export default function CoachForm({
             </select>
           </div>
 
-          {/* PHONE */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300">Phone</label>
-            <input
-              type="tel"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="input-field !px-3 !py-2"
-            />
-          </div>
-
-          {/* ADDRESS */}
+          {/* 🔥 ADDRESS جنب Level */}
           <div>
             <label className="block text-sm font-medium text-slate-300">Address</label>
             <input
