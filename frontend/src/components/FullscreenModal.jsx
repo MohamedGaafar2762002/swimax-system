@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 
 export default function FullscreenModal({
   open,
@@ -32,9 +33,9 @@ export default function FullscreenModal({
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[70] flex items-start justify-center pt-4 pb-10 px-4 bg-black/60 backdrop-blur-md"
+      className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 pb-10 px-4 bg-black/70 backdrop-blur-lg"
       role="dialog"
       aria-modal="true"
       aria-label={resolvedTitle || "Dialog"}
@@ -47,29 +48,22 @@ export default function FullscreenModal({
         className={[
           "relative w-full",
           maxWidthClassName,
-          "h-[85vh] overflow-hidden rounded-3xl border border-white/10",
-          "bg-[rgba(10,22,46,0.85)] backdrop-blur-xl shadow-2xl",
+          "max-h-[85vh] overflow-hidden rounded-3xl border border-white/10",
+          "bg-[rgba(10,22,46,0.9)] backdrop-blur-xl shadow-2xl",
           "animate-[uwModalIn_160ms_ease-out]",
         ].join(" ")}
       >
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(34,211,238,0.14),transparent_55%)]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-sky-400/10 blur-3xl"
-          aria-hidden
-        />
+        {/* Glow Effects */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(34,211,238,0.14),transparent_55%)]" />
+        <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-sky-400/10 blur-3xl" />
 
         {/* Header */}
         <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-4">
           <h2 className="text-base font-semibold text-slate-100">
             {resolvedTitle}
           </h2>
+
           <button
             type="button"
             onClick={() => {
@@ -84,8 +78,8 @@ export default function FullscreenModal({
           </button>
         </div>
 
-        {/* Body (scrollable) */}
-        <div className="relative h-[calc(85vh-64px)] overflow-y-auto px-6 py-5">
+        {/* Body */}
+        <div className="relative max-h-[calc(85vh-64px)] overflow-y-auto px-6 py-5">
           {children}
         </div>
       </div>
@@ -96,6 +90,7 @@ export default function FullscreenModal({
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
-    </div>
+    </div>,
+    document.body
   );
 }

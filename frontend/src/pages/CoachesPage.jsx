@@ -251,7 +251,7 @@ export default function CoachesPage() {
         onClose={closeForm}
         closeDisabled={formSubmitting}
         title={formMode === "create" ? "Add Coach" : "Edit Coach"}
-        maxWidthClassName="max-w-4xl"
+        maxWidthClassName="max-w-3xl"
       >
         <CoachForm
           initialValues={
