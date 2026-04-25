@@ -34,7 +34,7 @@ export default function FullscreenModal({
 
   return (
     <div
-      cclassName="fixed inset-0 z-[70] flex items-start justify-center pt-20 pb-10 px-4 bg-black/60 backdrop-blur-md"
+      className="fixed inset-0 z-[70] flex items-start justify-center pt-4 pb-10 px-4 bg-black/60 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-label={resolvedTitle || "Dialog"}
@@ -52,13 +52,24 @@ export default function FullscreenModal({
           "animate-[uwModalIn_160ms_ease-out]",
         ].join(" ")}
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(34,211,238,0.14),transparent_55%)]" aria-hidden />
-        <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-sky-400/10 blur-3xl" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(34,211,238,0.14),transparent_55%)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-sky-400/10 blur-3xl"
+          aria-hidden
+        />
 
         {/* Header */}
         <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-4">
-          <h2 className="text-base font-semibold text-slate-100">{resolvedTitle}</h2>
+          <h2 className="text-base font-semibold text-slate-100">
+            {resolvedTitle}
+          </h2>
           <button
             type="button"
             onClick={() => {
@@ -88,4 +99,3 @@ export default function FullscreenModal({
     </div>
   );
 }
-
