@@ -268,6 +268,8 @@ export default function TraineesPage() {
             editingTrainee || {
               name: "",
               age: "",
+              phone: "",
+              address: "",
               level: "Beginner",
               notes: "",
             }

@@ -259,10 +259,12 @@ export default function CoachesPage() {
               ? {
                   name: editingCoach.name,
                   age: editingCoach.age,
+                  phone: editingCoach.phone ?? "",
+                  address: editingCoach.address ?? "",
                   bio: editingCoach.bio ?? "",
                   image: editingCoach.image || "",
                 }
-              : { name: "", age: "", bio: "", image: "" }
+              : { name: "", age: "", phone: "", address: "", bio: "", image: "" }
           }
           onSubmit={handleFormSubmit}
           onCancel={closeForm}

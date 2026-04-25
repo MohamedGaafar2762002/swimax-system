@@ -131,6 +131,24 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Phone
+                </p>
+                <p className="mt-2 text-slate-300">
+                  {coach.phone || "—"}
+                </p>
+              </div>
+
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Address
+                </p>
+                <p className="mt-2 text-slate-300">
+                  {coach.address || "—"}
+                </p>
+              </div>
+
               <div className="profile-stat overflow-visible sm:col-span-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Bio

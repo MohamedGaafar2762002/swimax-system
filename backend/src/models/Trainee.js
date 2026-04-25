@@ -8,6 +8,20 @@ const traineeSchema = new mongoose.Schema(
 
     age: { type: Number, required: true, min: 0 },
 
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+      match: [/^[0-9+\-() ]{7,20}$/, "Phone number format is invalid"],
+    },
+
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: [3, "Address must be at least 3 characters"],
+    },
+
     level: { type: String, required: true, enum: TRAINEE_LEVELS },
 
     notes: { type: String, default: "", trim: true },

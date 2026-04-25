@@ -35,8 +35,10 @@ export default function TraineeTable({
           {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={index}
-              className="grid animate-pulse grid-cols-[1.2fr,0.6fr,0.9fr,0.9fr,0.9fr] gap-3 rounded-xl bg-slate-950/50 p-4"
+              className="grid animate-pulse grid-cols-[1.1fr,0.55fr,1fr,1.2fr,0.8fr,0.9fr,0.95fr] gap-3 rounded-xl bg-slate-950/50 p-4"
             >
+              <div className="h-4 rounded-lg bg-slate-800" />
+              <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
@@ -66,6 +68,8 @@ export default function TraineeTable({
             <tr>
               <SortHeader label="Name" field="name" sortBy={sortBy} order={order} onSort={onSortColumn} />
               <SortHeader label="Age" field="age" sortBy={sortBy} order={order} onSort={onSortColumn} />
+              <th className="px-4 py-4 font-medium text-slate-400">Phone</th>
+              <th className="px-4 py-4 font-medium text-slate-400">Address</th>
               <SortHeader label="Level" field="level" sortBy={sortBy} order={order} onSort={onSortColumn} />
               <SortHeader
                 label="Created"
@@ -82,6 +86,10 @@ export default function TraineeTable({
               <tr key={t._id} className="table-row-hover odd:bg-slate-900/15 even:bg-transparent">
                 <td className="px-5 py-4 font-medium text-slate-100">{t.name}</td>
                 <td className="px-5 py-4 text-slate-300">{t.age}</td>
+                <td className="px-5 py-4 text-slate-300">{t.phone || "—"}</td>
+                <td className="max-w-[220px] truncate px-5 py-4 text-slate-300" title={t.address || ""}>
+                  {t.address || "—"}
+                </td>
                 <td className="px-5 py-4 text-slate-300">{t.level}</td>
                 <td className="px-5 py-4 text-slate-500">
                   {t.createdAt ? new Date(t.createdAt).toLocaleDateString() : "—"}

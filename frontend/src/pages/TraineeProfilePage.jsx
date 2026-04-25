@@ -141,6 +141,24 @@ export default function TraineeProfilePage() {
                 </p>
               </div>
 
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Phone
+                </p>
+                <p className="mt-2 text-slate-300">
+                  {trainee.phone || "—"}
+                </p>
+              </div>
+
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Address
+                </p>
+                <p className="mt-2 text-slate-300">
+                  {trainee.address || "—"}
+                </p>
+              </div>
+
               <div className="profile-stat border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent sm:col-span-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Skill level

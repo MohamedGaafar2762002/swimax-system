@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const empty = { name: "", age: "", bio: "", image: null };
+const empty = { name: "", age: "", phone: "", address: "", bio: "", image: null };
 
 export default function CoachForm({
   initialValues = empty,
@@ -16,6 +16,9 @@ export default function CoachForm({
       : ""
   );
   const [bio, setBio] = useState(initialValues.bio ?? "");
+  const [phone, setPhone] = useState(initialValues.phone ?? "");
+  const [address, setAddress] = useState(initialValues.address ?? "");
+  const [errors, setErrors] = useState({});
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -28,6 +31,9 @@ export default function CoachForm({
         : ""
     );
     setBio(initialValues.bio ?? "");
+    setPhone(initialValues.phone ?? "");
+    setAddress(initialValues.address ?? "");
+    setErrors({});
 
     // ✅ التعديل المهم
     if (initialValues.image) {
@@ -49,10 +55,29 @@ export default function CoachForm({
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const nextErrors = {};
+    const phoneRegex = /^[0-9+\-() ]{7,20}$/;
+    if (!name.trim()) nextErrors.name = "Name is required";
+    if (!age) nextErrors.age = "Age is required";
+    if (!phone.trim()) nextErrors.phone = "Phone is required";
+    else if (!phoneRegex.test(phone.trim())) {
+      nextErrors.phone = "Phone format is invalid";
+    }
+    if (!address.trim()) nextErrors.address = "Address is required";
+    else if (address.trim().length < 3) {
+      nextErrors.address = "Address must be at least 3 characters";
+    }
+    if (Object.keys(nextErrors).length) {
+      setErrors(nextErrors);
+      return;
+    }
+    setErrors({});
 
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("name", name.trim());
     formData.append("age", age === "" ? "" : Number(age));
+    formData.append("phone", phone.trim());
+    formData.append("address", address.trim());
     formData.append("bio", bio);
 
     if (image) {
@@ -64,7 +89,7 @@ export default function CoachForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2">
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300">
             Coach photo <span className="text-slate-500">(optional)</span>
@@ -88,9 +113,18 @@ export default function CoachForm({
           </div>
         </div>
 
-        <div>
+        <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300">Name</label>
-          <input required value={name} onChange={(e) => setName(e.target.value)} className="input-field" />
+          <input
+            required
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setErrors((prev) => ({ ...prev, name: null }));
+            }}
+            className="input-field !px-3 !py-2"
+          />
+          {errors.name ? <p className="mt-1 text-xs text-red-300">{errors.name}</p> : null}
         </div>
 
         <div>
@@ -100,9 +134,45 @@ export default function CoachForm({
             min={0}
             required
             value={age}
-            onChange={(e) => setAge(e.target.value)}
-            className="input-field"
+            onChange={(e) => {
+              setAge(e.target.value);
+              setErrors((prev) => ({ ...prev, age: null }));
+            }}
+            className="input-field !px-3 !py-2"
           />
+          {errors.age ? <p className="mt-1 text-xs text-red-300">{errors.age}</p> : null}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-300">Phone</label>
+          <input
+            type="tel"
+            required
+            placeholder="Enter phone number"
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              setErrors((prev) => ({ ...prev, phone: null }));
+            }}
+            className="input-field !px-3 !py-2"
+          />
+          {errors.phone ? <p className="mt-1 text-xs text-red-300">{errors.phone}</p> : null}
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-slate-300">Address</label>
+          <input
+            type="text"
+            required
+            placeholder="Enter address"
+            value={address}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              setErrors((prev) => ({ ...prev, address: null }));
+            }}
+            className="input-field !px-3 !py-2"
+          />
+          {errors.address ? <p className="mt-1 text-xs text-red-300">{errors.address}</p> : null}
         </div>
 
         <div className="md:col-span-2">
@@ -113,7 +183,7 @@ export default function CoachForm({
             rows={3}
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="input-field min-h-[5rem] resize-y"
+            className="input-field min-h-[5rem] resize-y !px-3 !py-2"
           />
         </div>
       </div>

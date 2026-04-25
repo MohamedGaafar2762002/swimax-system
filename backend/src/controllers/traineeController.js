@@ -6,6 +6,7 @@ import cloudinary from "../config/cloudinary.js";
 
 const ALLOWED_SORT_FIELDS = ["name", "age", "level", "createdAt"];
 const MAX_PAGE_SIZE = 100;
+const PHONE_REGEX = /^[0-9+\-() ]{7,20}$/;
 
 const populateSession = { path: "sessionId", select: "schedule" };
 
@@ -14,7 +15,7 @@ function invalidIdResponse(res) {
 }
 
 function parseTraineePayload(body) {
-  const { name, age, level } = body ?? {};
+  const { name, age, level, phone, address } = body ?? {};
 
   if (!name || String(name).trim() === "") {
     return { error: "Name is required" };
@@ -34,10 +35,28 @@ function parseTraineePayload(body) {
     return { error: `Level must be one of: ${TRAINEE_LEVELS.join(", ")}` };
   }
 
+  if (!phone || String(phone).trim() === "") {
+    return { error: "Phone is required" };
+  }
+  const phoneStr = String(phone).trim();
+  if (!PHONE_REGEX.test(phoneStr)) {
+    return { error: "Phone must match format /^[0-9+\\-() ]{7,20}$/" };
+  }
+
+  if (!address || String(address).trim() === "") {
+    return { error: "Address is required" };
+  }
+  const addressStr = String(address).trim();
+  if (addressStr.length < 3) {
+    return { error: "Address must be at least 3 characters" };
+  }
+
   const data = {
     name: String(name).trim(),
     age: ageNum,
     level: levelStr,
+    phone: phoneStr,
+    address: addressStr,
   };
 
   if ("notes" in body) {
