@@ -151,15 +151,10 @@ export default function TraineesPage() {
     setError(null);
 
     try {
-      const config =
-        payload instanceof FormData
-          ? { headers: { "Content-Type": "multipart/form-data" } }
-          : {};
-
       if (formMode === "create") {
-        await api.post("/api/trainees", payload, config);
+        await api.post("/api/trainees", payload);
       } else if (editingTrainee?._id) {
-        await api.put(`/api/trainees/${editingTrainee._id}`, payload, config);
+        await api.put(`/api/trainees/${editingTrainee._id}`, payload);
       }
 
       await loadTrainees();

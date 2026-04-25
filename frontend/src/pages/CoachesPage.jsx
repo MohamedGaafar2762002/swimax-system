@@ -141,13 +141,9 @@ export default function CoachesPage() {
 
     try {
       if (formMode === "create") {
-        await api.post("/api/coaches", payload, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await api.post("/api/coaches", payload);
       } else if (editingCoach?._id) {
-        await api.put(`/api/coaches/${editingCoach._id}`, payload, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await api.put(`/api/coaches/${editingCoach._id}`, payload);
       }
 
       await loadCoaches();

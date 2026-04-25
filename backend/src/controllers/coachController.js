@@ -60,6 +60,12 @@ function parseCoachPayload(body = {}) {
  */
 export async function createCoach(req, res, next) {
   try {
+    if (process.env.NODE_ENV !== "production") {
+      // Debug multipart parsing in development
+      // eslint-disable-next-line no-console
+      console.log("[createCoach] req.body =", req.body);
+    }
+
     const parsed = parseCoachPayload(req.body);
     if (parsed.error) {
       return res.status(400).json({ message: parsed.error });
@@ -137,6 +143,12 @@ export async function getCoachById(req, res, next) {
  */
 export async function updateCoach(req, res, next) {
   try {
+    if (process.env.NODE_ENV !== "production") {
+      // Debug multipart parsing in development
+      // eslint-disable-next-line no-console
+      console.log("[updateCoach] req.body =", req.body);
+    }
+
     const parsed = parseCoachPayload(req.body);
     if (parsed.error) {
       return res.status(400).json({ message: parsed.error });
