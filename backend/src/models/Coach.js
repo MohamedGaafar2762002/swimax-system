@@ -22,6 +22,13 @@ const coachSchema = new mongoose.Schema(
 
     bio: { type: String, default: "", trim: true },
 
+    // ✅🔥 أضف ده
+    level: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+      default: "Beginner",
+    },
+
     totalWorkingHours: { type: Number, default: 0, min: 0 },
 
     // 🖼️ Image URL (Cloudinary)
@@ -30,7 +37,7 @@ const coachSchema = new mongoose.Schema(
       default: "",
     },
 
-    // 🔥 مهم: public_id عشان نقدر نمسح الصورة
+    // 🔥 public_id عشان نقدر نمسح الصورة
     imagePublicId: {
       type: String,
       default: "",

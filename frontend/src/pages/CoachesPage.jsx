@@ -134,7 +134,6 @@ export default function CoachesPage() {
     setEditingCoach(null);
   }
 
-  /* 🔥🔥🔥 FIX: SUPPORT IMAGE UPLOAD */
   async function handleFormSubmit(payload) {
     setFormSubmitting(true);
     setError(null);
@@ -199,7 +198,7 @@ export default function CoachesPage() {
           {error}
         </div>
       )}
-      {/* 🔥 SEARCH FIRST */}
+
       <CoachesToolbar
         search={search}
         onSearchChange={setSearch}
@@ -210,7 +209,7 @@ export default function CoachesPage() {
         limit={limit}
         onLimitChange={handleLimitChange}
       />
-      {/* 🔥 BUTTON تحت السيرش */}
+
       <div className="flex justify-end">
         <button
           type="button"
@@ -220,7 +219,7 @@ export default function CoachesPage() {
           Add coach
         </button>
       </div>
-      {/* 🔥 TABLE */}
+
       <CoachTable
         coaches={coaches}
         loading={loading}
@@ -231,7 +230,7 @@ export default function CoachesPage() {
         onSortColumn={handleSortColumn}
         emptyHint={emptyHint}
       />
-      {/* 🔥 PAGINATION */}
+
       <CoachesPagination
         currentPage={page}
         totalPages={totalPages}
@@ -241,6 +240,7 @@ export default function CoachesPage() {
         onPrev={() => setPage((p) => Math.max(1, p - 1))}
         onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
       />
+
       {/* 🔥 FORM MODAL */}
       <FullscreenModal
         open={formOpen}
@@ -259,15 +259,24 @@ export default function CoachesPage() {
                   address: editingCoach.address ?? "",
                   bio: editingCoach.bio ?? "",
                   image: editingCoach.image || "",
+                  level: editingCoach.level || "Beginner", // ✅🔥
                 }
-              : { name: "", age: "", phone: "", address: "", bio: "", image: "" }
+              : {
+                  name: "",
+                  age: "",
+                  phone: "",
+                  address: "",
+                  bio: "",
+                  image: "",
+                  level: "Beginner", // ✅🔥
+                }
           }
           onSubmit={handleFormSubmit}
           onCancel={closeForm}
           submitting={formSubmitting}
         />
       </FullscreenModal>
-      {/* 🔥 DELETE MODAL */}
+
       <ConfirmModal
         open={deleteOpen}
         title="Delete coach?"

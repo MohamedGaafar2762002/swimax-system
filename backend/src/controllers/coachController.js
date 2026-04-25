@@ -14,7 +14,8 @@ const ALLOWED_SORT_FIELDS = [
 const MAX_PAGE_SIZE = 100;
 
 function parseCoachPayload(body = {}) {
-  const { name, age, phone, address, bio } = body;
+  // ✅ أضف level هنا
+  const { name, age, phone, address, bio, level } = body;
 
   if (!name || String(name).trim() === "") {
     return { error: "Name is required" };
@@ -54,6 +55,9 @@ function parseCoachPayload(body = {}) {
       phone: phoneStr,
       address: addressStr,
       bio: bio ? String(bio) : "",
+
+      // ✅🔥 أهم سطر
+      level: level || "Beginner",
     },
   };
 }
