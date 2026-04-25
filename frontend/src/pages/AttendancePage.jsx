@@ -269,9 +269,6 @@ export default function AttendancePage() {
       )}
 
       <section className="toolbar-strip">
-        <div className="flex w-full items-center justify-between gap-3">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Filters</h2>
-        </div>
         <div className="grid w-full gap-3 md:grid-cols-6">
           <label className="space-y-2 text-sm">
             <span className="text-slate-400">Start date</span>
