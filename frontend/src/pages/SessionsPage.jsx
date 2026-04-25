@@ -402,37 +402,40 @@ export default function SessionsPage() {
           {successMessage}
         </div>
       )}
+<div className="card-float p-4 md:p-5">
 
       <SessionsToolbar
-        search={search}
-        onSearchChange={setSearch}
-        sortBy={sortBy}
-        onSortByChange={handleSortByChange}
-        order={order}
-        onOrderChange={handleOrderChange}
-        limit={limit}
-        onLimitChange={handleLimitChange}
-        actions={
-          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:justify-end">
-            <button
-              type="button"
-              onClick={() => setClearOpen(true)}
-              disabled={clearSubmitting || loading}
-              className="btn-secondary w-full border-red-500/45 bg-red-950/35 text-red-100 hover:border-red-400/60 hover:bg-red-950/55 sm:w-auto"
-            >
-              {clearSubmitting ? "Clearing..." : "Clear All Sessions"}
-            </button>
-            <button
-              type="button"
-              onClick={openCreate}
-              disabled={loading || formSubmitting}
-              className="btn-primary w-full sm:w-auto"
-            >
-              Add session
-            </button>
-          </div>
-        }
-      />
+  search={search}
+  onSearchChange={setSearch}
+  sortBy={sortBy}
+  onSortByChange={handleSortByChange}
+  order={order}
+  onOrderChange={handleOrderChange}
+  limit={limit}
+  onLimitChange={handleLimitChange}
+  actions={
+    <>
+      <button
+        type="button"
+        onClick={() => setClearOpen(true)}
+        disabled={clearSubmitting || loading}
+        className="btn-secondary border-red-500/45 bg-red-950/35 text-red-100 hover:border-red-400/60 hover:bg-red-950/55"
+      >
+        {clearSubmitting ? "Clearing..." : "Clear All Sessions"}
+      </button>
+
+      <button
+        type="button"
+        onClick={openCreate}
+        disabled={loading || formSubmitting}
+        className="btn-primary"
+      >
+        Add session
+      </button>
+    </>
+  }
+/>
+</div>
 
       <SessionTable
         sessions={visibleSessions}
