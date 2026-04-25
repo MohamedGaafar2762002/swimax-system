@@ -49,13 +49,11 @@ const upload = multer({
 
 /* ================= ROUTES ================= */
 
-// 🔥🔥🔥 الحل هنا: any() بدل single()
-
-// ✅ create (يدعم image + باقي fields)
-router.post("/", upload.any(), createCoach);
+// ✅ create (image optional)
+router.post("/", upload.single("image"), createCoach);
 
 // ✅ update
-router.put("/:id", upload.any(), updateCoach);
+router.put("/:id", upload.single("image"), updateCoach);
 
 // GET
 router.get("/", getAllCoaches);

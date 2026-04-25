@@ -84,15 +84,6 @@ export default function CoachForm({
       formData.append("image", image);
     }
 
-    if (import.meta.env.DEV) {
-      // Debug multipart payload flow during local development
-      // eslint-disable-next-line no-console
-      console.log(
-        "[CoachForm] FormData entries:",
-        Array.from(formData.entries()).map(([k, v]) => [k, v instanceof File ? v.name : v]),
-      );
-    }
-
     await onSubmit(formData);
   }
 

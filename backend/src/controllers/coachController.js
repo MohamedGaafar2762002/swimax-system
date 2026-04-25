@@ -63,24 +63,12 @@ function parseCoachPayload(body = {}) {
  */
 export async function createCoach(req, res, next) {
   try {
-    console.log("🔥 [createCoach] REQ.BODY =", req.body);
-    console.log("🔥 [createCoach] REQ.FILE =", req.file);
-
-    // 🔥 fallback لو multer ضيّع fields
-    const body = req.body || {};
-    body.phone = body.phone || req.body?.phone;
-    body.address = body.address || req.body?.address;
-
-    const parsed = parseCoachPayload(body);
+    const parsed = parseCoachPayload(req.body);
     if (parsed.error) {
-      return res.status(400).json({
-        message: parsed.error,
-        debug: { body },
-      });
+      return res.status(400).json({ message: parsed.error });
     }
 
     const data = parsed.data;
-    console.log("🔥 [createCoach] PARSED =", data);
 
     if (req.file) {
       data.image = req.file.path;
@@ -88,16 +76,8 @@ export async function createCoach(req, res, next) {
     }
 
     const coach = await Coach.create(data);
-    console.log("🔥 [createCoach] SAVED =", coach);
 
-    // 🔥 رجع debug مؤقتًا
-    res.status(201).json({
-      debug: {
-        body,
-        parsed: data,
-      },
-      coach,
-    });
+    res.status(201).json(coach);
   } catch (err) {
     next(err);
   }
@@ -164,22 +144,10 @@ export async function getCoachById(req, res, next) {
  */
 export async function updateCoach(req, res, next) {
   try {
-    console.log("🔥 [updateCoach] REQ.BODY =", req.body);
-    console.log("🔥 [updateCoach] REQ.FILE =", req.file);
-
-    const body = req.body || {};
-    body.phone = body.phone || req.body?.phone;
-    body.address = body.address || req.body?.address;
-
-    const parsed = parseCoachPayload(body);
+    const parsed = parseCoachPayload(req.body);
     if (parsed.error) {
-      return res.status(400).json({
-        message: parsed.error,
-        debug: { body },
-      });
+      return res.status(400).json({ message: parsed.error });
     }
-
-    console.log("🔥 [updateCoach] PARSED =", parsed.data);
 
     const coach = await Coach.findById(req.params.id);
 
@@ -199,15 +167,8 @@ export async function updateCoach(req, res, next) {
     }
 
     await coach.save();
-    console.log("🔥 [updateCoach] SAVED =", coach);
 
-    res.json({
-      debug: {
-        body,
-        parsed: parsed.data,
-      },
-      coach,
-    });
+    res.json(coach);
   } catch (err) {
     next(err);
   }
