@@ -23,6 +23,7 @@ function parseCoachPayload(body = {}) {
   if (age === undefined || age === null || age === "") {
     return { error: "Age is required" };
   }
+
   const ageNum = Number(age);
   if (!Number.isFinite(ageNum) || ageNum < 0) {
     return { error: "Age must be a valid non-negative number" };
@@ -31,14 +32,16 @@ function parseCoachPayload(body = {}) {
   if (!phone || String(phone).trim() === "") {
     return { error: "Phone is required" };
   }
+
   const phoneStr = String(phone).trim();
   if (!PHONE_REGEX.test(phoneStr)) {
-    return { error: "Phone must match format /^[0-9+\\-() ]{7,20}$/" };
+    return { error: "Phone format is invalid" };
   }
 
   if (!address || String(address).trim() === "") {
     return { error: "Address is required" };
   }
+
   const addressStr = String(address).trim();
   if (addressStr.length < 3) {
     return { error: "Address must be at least 3 characters" };
@@ -60,36 +63,41 @@ function parseCoachPayload(body = {}) {
  */
 export async function createCoach(req, res, next) {
   try {
-   
-      // Debug multipart parsing in development
-      // eslint-disable-next-line no-console
-      console.log("[createCoach] req.body =", req.body);
-      // eslint-disable-next-line no-console
-      console.log("[createCoach] req.file =", req.file ? { fieldname: req.file.fieldname, originalname: req.file.originalname, path: req.file.path } : null);
-    
+    console.log("🔥 [createCoach] REQ.BODY =", req.body);
+    console.log("🔥 [createCoach] REQ.FILE =", req.file);
 
-    const parsed = parseCoachPayload(req.body);
+    // 🔥 fallback لو multer ضيّع fields
+    const body = req.body || {};
+    body.phone = body.phone || req.body?.phone;
+    body.address = body.address || req.body?.address;
+
+    const parsed = parseCoachPayload(body);
     if (parsed.error) {
-      return res.status(400).json({ message: parsed.error });
+      return res.status(400).json({
+        message: parsed.error,
+        debug: { body },
+      });
     }
+
     const data = parsed.data;
-    if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
-      console.log("[createCoach] parsed.data =", data);
-    }
+    console.log("🔥 [createCoach] PARSED =", data);
 
     if (req.file) {
-      data.image = req.file.path; // URL
-      data.imagePublicId = req.file.filename; // public_id
+      data.image = req.file.path;
+      data.imagePublicId = req.file.filename;
     }
 
     const coach = await Coach.create(data);
-    if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
-      console.log("[createCoach] SAVED =", coach);
-    }
+    console.log("🔥 [createCoach] SAVED =", coach);
 
-    res.status(201).json(coach);
+    // 🔥 رجع debug مؤقتًا
+    res.status(201).json({
+      debug: {
+        body,
+        parsed: data,
+      },
+      coach,
+    });
   } catch (err) {
     next(err);
   }
@@ -110,8 +118,11 @@ export async function getAllCoaches(req, res, next) {
       filter.$or = [{ name: rx }, { phone: rx }, { address: rx }];
     }
 
-    const sortField = ALLOWED_SORT_FIELDS.includes(sortBy) ? sortBy : "createdAt";
+    const sortField = ALLOWED_SORT_FIELDS.includes(sortBy)
+      ? sortBy
+      : "createdAt";
     const sortOrder = order === "asc" ? 1 : -1;
+
     const totalItems = await Coach.countDocuments(filter);
     const totalPages = Math.max(1, Math.ceil(totalItems / limit));
 
@@ -153,22 +164,22 @@ export async function getCoachById(req, res, next) {
  */
 export async function updateCoach(req, res, next) {
   try {
-    if (process.env.NODE_ENV !== "production") {
-      // Debug multipart parsing in development
-      // eslint-disable-next-line no-console
-      console.log("[updateCoach] req.body =", req.body);
-      // eslint-disable-next-line no-console
-      console.log("[updateCoach] req.file =", req.file ? { fieldname: req.file.fieldname, originalname: req.file.originalname, path: req.file.path } : null);
+    console.log("🔥 [updateCoach] REQ.BODY =", req.body);
+    console.log("🔥 [updateCoach] REQ.FILE =", req.file);
+
+    const body = req.body || {};
+    body.phone = body.phone || req.body?.phone;
+    body.address = body.address || req.body?.address;
+
+    const parsed = parseCoachPayload(body);
+    if (parsed.error) {
+      return res.status(400).json({
+        message: parsed.error,
+        debug: { body },
+      });
     }
 
-    const parsed = parseCoachPayload(req.body);
-    if (parsed.error) {
-      return res.status(400).json({ message: parsed.error });
-    }
-    if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
-      console.log("[updateCoach] parsed.data =", parsed.data);
-    }
+    console.log("🔥 [updateCoach] PARSED =", parsed.data);
 
     const coach = await Coach.findById(req.params.id);
 
@@ -176,12 +187,9 @@ export async function updateCoach(req, res, next) {
       return res.status(404).json({ message: "Coach not found" });
     }
 
-    // ✏️ update fields
     Object.assign(coach, parsed.data);
 
-    // 🧨 لو فيه صورة جديدة
     if (req.file) {
-      // احذف القديمة لو موجودة
       if (coach.imagePublicId) {
         await cloudinary.uploader.destroy(coach.imagePublicId);
       }
@@ -191,12 +199,15 @@ export async function updateCoach(req, res, next) {
     }
 
     await coach.save();
-    if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
-      console.log("[updateCoach] SAVED =", coach);
-    }
+    console.log("🔥 [updateCoach] SAVED =", coach);
 
-    res.json(coach);
+    res.json({
+      debug: {
+        body,
+        parsed: parsed.data,
+      },
+      coach,
+    });
   } catch (err) {
     next(err);
   }
@@ -213,7 +224,6 @@ export async function deleteCoach(req, res, next) {
       return res.status(404).json({ message: "Coach not found" });
     }
 
-    // 🧨 احذف الصورة من Cloudinary
     if (coach.imagePublicId) {
       await cloudinary.uploader.destroy(coach.imagePublicId);
     }
