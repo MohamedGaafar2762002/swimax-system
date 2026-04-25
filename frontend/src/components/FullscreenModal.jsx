@@ -34,7 +34,7 @@ export default function FullscreenModal({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
+      cclassName="fixed inset-0 z-[70] flex items-start justify-center pt-20 pb-10 px-4 bg-black/60 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-label={resolvedTitle || "Dialog"}
