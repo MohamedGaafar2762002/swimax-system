@@ -65,7 +65,6 @@ export default function CoachProfilePage() {
     );
   }
 
-  // ✅ الحل الصح
   const imageUrl = coach.image?.startsWith("http")
     ? coach.image
     : coach.image
@@ -83,6 +82,7 @@ export default function CoachProfilePage() {
       </Link>
 
       <div className="card-float overflow-hidden p-0">
+        {/* Header */}
         <div className="border-b border-sky-500/10 bg-gradient-to-r from-sky-500/10 via-transparent to-cyan-500/10 px-5 py-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300/90">
             SWIMAX · Coach
@@ -92,7 +92,10 @@ export default function CoachProfilePage() {
           </h1>
         </div>
 
+        {/* Content */}
         <div className="flex flex-col gap-4 p-5 md:grid md:grid-cols-[220px_minmax(0,1fr)] md:items-start">
+          
+          {/* Image */}
           <div className="mx-auto w-full md:mx-0">
             <div className="relative h-[240px] w-full overflow-hidden rounded-2xl border border-sky-500/20 shadow-glow-sm md:h-[260px]">
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
@@ -111,8 +114,11 @@ export default function CoachProfilePage() {
             </div>
           </div>
 
+          {/* Info */}
           <div className="flex h-full flex-col gap-4">
             <div className="grid h-full gap-4 sm:grid-cols-2">
+
+              {/* Name */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Name
@@ -122,6 +128,7 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              {/* Age */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Age
@@ -131,6 +138,7 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              {/* Phone */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Phone
@@ -140,6 +148,7 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              {/* Address */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Address
@@ -149,6 +158,7 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              {/* Bio */}
               <div className="profile-stat overflow-visible sm:col-span-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Bio
@@ -163,6 +173,7 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              {/* Hours */}
               <div className="profile-stat border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 to-transparent">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Total pool hours
@@ -172,6 +183,17 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
+              {/* 🔥 Skill Level */}
+              <div className="profile-stat">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Skill Level
+                </p>
+                <p className="mt-2 text-slate-300">
+                  {coach.level || "—"}
+                </p>
+              </div>
+
+              {/* 🔥 Created */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Record created
@@ -182,6 +204,7 @@ export default function CoachProfilePage() {
                     : "—"}
                 </p>
               </div>
+
             </div>
           </div>
         </div>
