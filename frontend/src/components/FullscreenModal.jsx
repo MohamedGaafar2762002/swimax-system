@@ -59,11 +59,12 @@ export default function FullscreenModal({
         <div className="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-sky-400/10 blur-3xl" />
 
         {/* Header */}
-        <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div className="relative flex items-center justify-between border-b border-white/10 px-6 pt-5 pb-4">
           <h2 className="text-base font-semibold text-slate-100">
             {resolvedTitle}
           </h2>
 
+          {/* 🔥 NEW CLEAN CLOSE BUTTON */}
           <button
             type="button"
             onClick={() => {
@@ -72,22 +73,46 @@ export default function FullscreenModal({
             }}
             aria-label="Close"
             disabled={closeDisabled}
-            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-9 w-9 items-center justify-center rounded-full
+                       border border-sky-400/30
+                       bg-sky-500/10 text-sky-200
+                       transition duration-200
+                       hover:bg-sky-500/20 hover:text-white
+                       hover:shadow-[0_0_10px_rgba(56,189,248,0.5)]
+                       disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="text-xl leading-none">×</span>
+            <span className="text-lg leading-none">✕</span>
           </button>
         </div>
 
         {/* Body */}
-        <div className="relative max-h-[calc(85vh-64px)] overflow-y-auto px-6 py-5">
+        <div className="relative max-h-[calc(85vh-64px)] overflow-y-auto px-6 py-5 custom-scroll">
           {children}
         </div>
       </div>
 
+      {/* 🔥 Scrollbar Style */}
       <style>{`
         @keyframes uwModalIn {
           from { opacity: 0; transform: translateY(10px) scale(0.985); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+          background: rgba(56, 189, 248, 0.4);
+          border-radius: 999px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(56, 189, 248, 0.7);
         }
       `}</style>
     </div>,

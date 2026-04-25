@@ -98,25 +98,7 @@ export default function CoachForm({
   return (
     <div className="space-y-4">
 
-      {/* 🔥 HEADER */}
-      <div className="flex items-center justify-between pb-5 border-b border-white/10">
-        <h2 className="text-lg font-semibold text-white">
-          {submitLabel === "Save" ? "Add Coach" : "Edit Coach"}
-        </h2>
-
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex h-9 w-9 items-center justify-center rounded-full
-                     border border-sky-400/30
-                     bg-sky-500/10 text-sky-200
-                     transition duration-200
-                     hover:bg-sky-500/20 hover:text-white
-                     hover:shadow-[0_0_10px_rgba(56,189,248,0.5)]"
-        >
-          ✕
-        </button>
-      </div>
+     
 
       {/* FORM */}
       <form onSubmit={handleSubmit} className="space-y-4">
