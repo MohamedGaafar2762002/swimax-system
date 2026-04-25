@@ -60,13 +60,13 @@ function parseCoachPayload(body = {}) {
  */
 export async function createCoach(req, res, next) {
   try {
-    if (process.env.NODE_ENV !== "production") {
+   
       // Debug multipart parsing in development
       // eslint-disable-next-line no-console
       console.log("[createCoach] req.body =", req.body);
       // eslint-disable-next-line no-console
       console.log("[createCoach] req.file =", req.file ? { fieldname: req.file.fieldname, originalname: req.file.originalname, path: req.file.path } : null);
-    }
+    
 
     const parsed = parseCoachPayload(req.body);
     if (parsed.error) {
