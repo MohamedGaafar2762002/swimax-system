@@ -5,6 +5,7 @@ import CoachForm from "../components/CoachForm.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 import CoachesToolbar from "../components/CoachesToolbar.jsx";
 import CoachesPagination from "../components/CoachesPagination.jsx";
+import FullscreenModal from "../components/FullscreenModal.jsx";
 import { useDebouncedValue } from "../hooks/useDebouncedValue.js";
 
 function getErrorMessage(err) {
@@ -245,37 +246,29 @@ export default function CoachesPage() {
         onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
       />
       {/* 🔥 FORM MODAL */}
-      {formOpen && (
-        <div
-          className="modal-overlay z-[60]"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) closeForm();
-          }}
-        >
-          <div className="modal-panel-lg p-5">
-            {" "}
-            {/* 👈 padding أقل */}
-            <h2 className="mb-4 text-base font-semibold text-white">
-              {formMode === "create" ? "New coach" : "Edit coach"}
-            </h2>
-            <CoachForm
-              initialValues={
-                editingCoach
-                  ? {
-                      name: editingCoach.name,
-                      age: editingCoach.age,
-                      bio: editingCoach.bio ?? "",
-                      image: editingCoach.image || "",
-                    }
-                  : { name: "", age: "", bio: "", image: "" }
-              }
-              onSubmit={handleFormSubmit}
-              onCancel={closeForm}
-              submitting={formSubmitting}
-            />
-          </div>
-        </div>
-      )}
+      <FullscreenModal
+        open={formOpen}
+        onClose={closeForm}
+        closeDisabled={formSubmitting}
+        title={formMode === "create" ? "Add Coach" : "Edit Coach"}
+        maxWidthClassName="max-w-4xl"
+      >
+        <CoachForm
+          initialValues={
+            editingCoach
+              ? {
+                  name: editingCoach.name,
+                  age: editingCoach.age,
+                  bio: editingCoach.bio ?? "",
+                  image: editingCoach.image || "",
+                }
+              : { name: "", age: "", bio: "", image: "" }
+          }
+          onSubmit={handleFormSubmit}
+          onCancel={closeForm}
+          submitting={formSubmitting}
+        />
+      </FullscreenModal>
       {/* 🔥 DELETE MODAL */}
       <ConfirmModal
         open={deleteOpen}

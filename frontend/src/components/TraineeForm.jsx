@@ -135,7 +135,8 @@ export default function TraineeForm({
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-end gap-2 pt-1">
+      <div className="sticky bottom-[-1px] z-10 -mx-6 mt-4 border-t border-white/10 bg-[rgba(10,22,46,0.92)] px-6 py-3">
+        <div className="flex flex-wrap justify-end gap-2">
         <button
           type="button"
           onClick={onCancel}
@@ -152,6 +153,7 @@ export default function TraineeForm({
         >
           {submitting ? "Saving…" : submitLabel}
         </button>
+      </div>
       </div>
     </form>
   );

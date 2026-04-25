@@ -5,6 +5,7 @@ import TraineeForm from "../components/TraineeForm.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 import TraineesToolbar from "../components/TraineesToolbar.jsx";
 import CoachesPagination from "../components/CoachesPagination.jsx";
+import FullscreenModal from "../components/FullscreenModal.jsx";
 import { useDebouncedValue } from "../hooks/useDebouncedValue.js";
 
 function getErrorMessage(err) {
@@ -255,34 +256,27 @@ export default function TraineesPage() {
         onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
       />
 
-      {formOpen && (
-        <div
-          className="modal-overlay z-[60] overflow-y-auto py-10"
-          role="presentation"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) closeForm();
-          }}
-        >
-          <div className="modal-panel-lg my-auto">
-            <h2 className="mb-6 text-lg font-semibold text-white">
-              {formMode === "create" ? "New trainee" : "Edit trainee"}
-            </h2>
-            <TraineeForm
-              initialValues={
-                editingTrainee || {
-                  name: "",
-                  age: "",
-                  level: "Beginner",
-                  notes: "",
-                }
-              }
-              onSubmit={handleFormSubmit}
-              onCancel={closeForm}
-              submitting={formSubmitting}
-            />
-          </div>
-        </div>
-      )}
+      <FullscreenModal
+        open={formOpen}
+        onClose={closeForm}
+        closeDisabled={formSubmitting}
+        title={formMode === "create" ? "Add Trainee" : "Edit Trainee"}
+        maxWidthClassName="max-w-4xl"
+      >
+        <TraineeForm
+          initialValues={
+            editingTrainee || {
+              name: "",
+              age: "",
+              level: "Beginner",
+              notes: "",
+            }
+          }
+          onSubmit={handleFormSubmit}
+          onCancel={closeForm}
+          submitting={formSubmitting}
+        />
+      </FullscreenModal>
       <ConfirmModal
         open={deleteOpen}
         title="Delete trainee?"
