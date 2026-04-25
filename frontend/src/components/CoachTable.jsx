@@ -13,7 +13,11 @@ function SortHeader({ label, field, sortBy, order, onSort }) {
         }`}
       >
         <span>{label}</span>
-        {active && <span className="text-xs opacity-90">{order === "asc" ? "↑" : "↓"}</span>}
+        {active && (
+          <span className="text-xs opacity-90">
+            {order === "asc" ? "↑" : "↓"}
+          </span>
+        )}
       </button>
     </th>
   );
@@ -36,11 +40,8 @@ export default function CoachTable({
           {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={index}
-              className="grid animate-pulse grid-cols-[1.2fr,0.6fr,1fr,1.2fr,0.9fr,1.1fr,1.2fr] gap-3 rounded-xl bg-slate-950/50 p-4"
+              className="grid animate-pulse grid-cols-[2fr,1fr,1fr,1.2fr] gap-3 rounded-xl bg-slate-950/50 p-4"
             >
-              <div className="h-4 rounded-lg bg-slate-800" />
-              <div className="h-4 rounded-lg bg-slate-800" />
-              <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
               <div className="h-4 rounded-lg bg-slate-800" />
@@ -55,8 +56,12 @@ export default function CoachTable({
   if (!coaches.length) {
     return (
       <div className="rounded-2xl border border-dashed border-sky-500/20 bg-slate-900/40 p-12 text-center shadow-inner">
-        <p className="text-base font-medium text-slate-100">No coaches yet.</p>
-        <p className="mt-2 text-sm text-slate-500">{emptyHint || "Add your first coach to get started."}</p>
+        <p className="text-base font-medium text-slate-100">
+          No coaches yet.
+        </p>
+        <p className="mt-2 text-sm text-slate-500">
+          {emptyHint || "Add your first coach to get started."}
+        </p>
       </div>
     );
   }
@@ -65,12 +70,16 @@ export default function CoachTable({
     <div className="table-shell">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-700/50 text-left text-sm">
+          {/* 🔥 HEADER */}
           <thead className="bg-slate-900/70">
             <tr>
-              <SortHeader label="Name" field="name" sortBy={sortBy} order={order} onSort={onSortColumn} />
-              <SortHeader label="Age" field="age" sortBy={sortBy} order={order} onSort={onSortColumn} />
-              <th className="px-4 py-4 font-medium text-slate-400">Phone</th>
-              <th className="px-4 py-4 font-medium text-slate-400">Address</th>
+              <SortHeader
+                label="Coach"
+                field="name"
+                sortBy={sortBy}
+                order={order}
+                onSort={onSortColumn}
+              />
               <SortHeader
                 label="Hours"
                 field="totalWorkingHours"
@@ -85,24 +94,51 @@ export default function CoachTable({
                 order={order}
                 onSort={onSortColumn}
               />
-              <th className="px-4 py-4 text-center font-medium text-slate-400">Actions</th>
+              <th className="px-4 py-4 text-center font-medium text-slate-400">
+                Actions
+              </th>
             </tr>
           </thead>
+
+          {/* 🔥 BODY */}
           <tbody className="divide-y divide-slate-700/40">
             {coaches.map((c) => (
-              <tr key={c._id} className="table-row-hover odd:bg-slate-900/15 even:bg-transparent">
-                <td className="px-5 py-4 font-medium text-slate-100">{c.name}</td>
-                <td className="px-5 py-4 text-slate-300">{c.age}</td>
-                <td className="px-5 py-4 text-slate-300">{c.phone || "—"}</td>
-                <td className="max-w-[220px] truncate px-5 py-4 text-slate-300" title={c.address || ""}>
-                  {c.address || "—"}
+              <tr
+                key={c._id}
+                className="table-row-hover odd:bg-slate-900/15 even:bg-transparent"
+              >
+                {/* 👤 Coach (اسم + صورة) */}
+                <td className="px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={c.image || "/placeholder.png"}
+                      alt=""
+                      className="h-10 w-10 rounded-xl object-cover ring-1 ring-sky-500/20"
+                    />
+                    <div>
+                      <p className="font-medium text-slate-100">{c.name}</p>
+                      <p className="text-xs text-slate-500">
+                        Swimming Coach
+                      </p>
+                    </div>
+                  </div>
                 </td>
+
+                {/* ⏱ Hours */}
                 <td className="px-5 py-4 text-slate-300">
-                  {formatDuration(hoursToMinutes(c.totalWorkingHours))}
+                  {formatDuration(
+                    hoursToMinutes(c.totalWorkingHours)
+                  )}
                 </td>
+
+                {/* 📅 Created */}
                 <td className="px-5 py-4 text-slate-500">
-                  {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : "—"}
+                  {c.createdAt
+                    ? new Date(c.createdAt).toLocaleDateString()
+                    : "—"}
                 </td>
+
+                {/* ⚙️ Actions */}
                 <td className="px-5 py-4">
                   <div className="flex flex-wrap justify-end gap-2">
                     <Link
@@ -111,6 +147,7 @@ export default function CoachTable({
                     >
                       Profile
                     </Link>
+
                     <button
                       type="button"
                       onClick={() => onEdit(c)}
@@ -118,6 +155,7 @@ export default function CoachTable({
                     >
                       Edit
                     </button>
+
                     <button
                       type="button"
                       onClick={() => onDelete(c)}
