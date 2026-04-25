@@ -24,7 +24,7 @@ export default function CoachesToolbar({
           autoComplete="off"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap">
+      <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
         <div>
           <label htmlFor="coach-sort" className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
             Sort by
