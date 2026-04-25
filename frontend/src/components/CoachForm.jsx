@@ -18,12 +18,9 @@ export default function CoachForm({
   const [bio, setBio] = useState(initialValues.bio ?? "");
   const [phone, setPhone] = useState(initialValues.phone ?? "");
   const [address, setAddress] = useState(initialValues.address ?? "");
-  
-  // ✅🔥 الجديد
   const [level, setLevel] = useState(initialValues.level ?? "Beginner");
 
   const [errors, setErrors] = useState({});
-
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -37,10 +34,7 @@ export default function CoachForm({
     setBio(initialValues.bio ?? "");
     setPhone(initialValues.phone ?? "");
     setAddress(initialValues.address ?? "");
-
-    // ✅🔥 مهم
     setLevel(initialValues.level ?? "Beginner");
-
     setErrors({});
 
     if (initialValues.image) {
@@ -92,8 +86,6 @@ export default function CoachForm({
     formData.append("phone", phone.trim());
     formData.append("address", address.trim());
     formData.append("bio", bio);
-
-    // ✅🔥 أهم سطر
     formData.append("level", level);
 
     if (image) {
@@ -104,127 +96,145 @@ export default function CoachForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid gap-3 md:grid-cols-2">
+    <div className="space-y-4">
 
-        {/* IMAGE */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-slate-300">
-            Coach photo <span className="text-slate-500">(optional)</span>
-          </label>
+      {/* 🔥 HEADER */}
+      <div className="flex items-center justify-between pb-5 border-b border-white/10">
+        <h2 className="text-lg font-semibold text-white">
+          {submitLabel === "Save" ? "Add Coach" : "Edit Coach"}
+        </h2>
 
-          <div className="mt-2 flex flex-wrap items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-slate-800 to-slate-900 shadow-inner ring-1 ring-sky-400/10">
-              {preview ? (
-                <img src={preview} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <span className="text-xs text-slate-500">No photo</span>
-              )}
+        <button
+          type="button"
+          onClick={onCancel}
+          className="flex h-9 w-9 items-center justify-center rounded-full
+                     border border-sky-400/30
+                     bg-sky-500/10 text-sky-200
+                     transition duration-200
+                     hover:bg-sky-500/20 hover:text-white
+                     hover:shadow-[0_0_10px_rgba(56,189,248,0.5)]"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* FORM */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid gap-3 md:grid-cols-2">
+
+          {/* IMAGE */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-slate-300">
+              Coach photo <span className="text-slate-500">(optional)</span>
+            </label>
+
+            <div className="mt-2 flex flex-wrap items-center gap-4">
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-slate-800 to-slate-900 shadow-inner ring-1 ring-sky-400/10">
+                {preview ? (
+                  <img src={preview} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-xs text-slate-500">No photo</span>
+                )}
+              </div>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="text-sm text-slate-400 file:mr-3 file:rounded-xl file:border-0 file:bg-sky-500/20 file:px-3 file:py-2 file:text-sm file:font-medium file:text-sky-200 hover:file:bg-sky-500/30"
+              />
             </div>
+          </div>
 
+          {/* NAME */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-slate-300">Name</label>
             <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="text-sm text-slate-400 file:mr-3 file:rounded-xl file:border-0 file:bg-sky-500/20 file:px-3 file:py-2 file:text-sm file:font-medium file:text-sky-200 hover:file:bg-sky-500/30"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="input-field !px-3 !py-2"
+            />
+          </div>
+
+          {/* AGE */}
+          <div>
+            <label className="block text-sm font-medium text-slate-300">Age</label>
+            <input
+              type="number"
+              min={0}
+              required
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+              className="input-field !px-3 !py-2"
+            />
+          </div>
+
+          {/* LEVEL */}
+          <div>
+            <label className="block text-sm font-medium text-slate-300">
+              Skill Level
+            </label>
+            <select
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+              className="input-field !px-3 !py-2"
+            >
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+
+          {/* PHONE */}
+          <div>
+            <label className="block text-sm font-medium text-slate-300">Phone</label>
+            <input
+              type="tel"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="input-field !px-3 !py-2"
+            />
+          </div>
+
+          {/* ADDRESS */}
+          <div>
+            <label className="block text-sm font-medium text-slate-300">Address</label>
+            <input
+              type="text"
+              required
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="input-field !px-3 !py-2"
+            />
+          </div>
+
+          {/* BIO */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-slate-300">
+              Bio
+            </label>
+            <textarea
+              rows={3}
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              className="input-field min-h-[5rem] resize-y !px-3 !py-2"
             />
           </div>
         </div>
 
-        {/* NAME */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-slate-300">Name</label>
-          <input
-            required
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setErrors((prev) => ({ ...prev, name: null }));
-            }}
-            className="input-field !px-3 !py-2"
-          />
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-2 pt-2">
+          <button type="button" onClick={onCancel} className="btn-secondary">
+            Cancel
+          </button>
+
+          <button type="submit" className="btn-primary">
+            {submitLabel}
+          </button>
         </div>
-
-        {/* AGE */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300">Age</label>
-          <input
-            type="number"
-            min={0}
-            required
-            value={age}
-            onChange={(e) => {
-              setAge(e.target.value);
-              setErrors((prev) => ({ ...prev, age: null }));
-            }}
-            className="input-field !px-3 !py-2"
-          />
-        </div>
-
-        {/* 🔥 LEVEL */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300">
-            Skill Level
-          </label>
-          <select
-            value={level}
-            onChange={(e) => setLevel(e.target.value)}
-            className="input-field !px-3 !py-2"
-          >
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-        </div>
-
-        {/* PHONE */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300">Phone</label>
-          <input
-            type="tel"
-            required
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="input-field !px-3 !py-2"
-          />
-        </div>
-
-        {/* ADDRESS */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300">Address</label>
-          <input
-            type="text"
-            required
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="input-field !px-3 !py-2"
-          />
-        </div>
-
-        {/* BIO */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-slate-300">
-            Bio
-          </label>
-          <textarea
-            rows={3}
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            className="input-field min-h-[5rem] resize-y !px-3 !py-2"
-          />
-        </div>
-      </div>
-
-      {/* ACTIONS */}
-      <div className="flex justify-end gap-2">
-        <button type="button" onClick={onCancel} className="btn-secondary">
-          Cancel
-        </button>
-
-        <button type="submit" className="btn-primary">
-          {submitLabel}
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
