@@ -9,8 +9,17 @@ function getErrorMessage(err) {
   return "Something went wrong";
 }
 
-function isArabic(text) {
-  return /[\u0600-\u06FF]/.test(text || "");
+// 🔥 Smart text component (auto RTL / LTR)
+function SmartText({ text, className = "" }) {
+  const isArabic = /[\u0600-\u06FF]/.test(text || "");
+  return (
+    <p
+      dir={isArabic ? "rtl" : "ltr"}
+      className={`${className} ${isArabic ? "text-right" : "text-left"}`}
+    >
+      {text || "—"}
+    </p>
+  );
 }
 
 export default function CoachProfilePage() {
@@ -72,8 +81,6 @@ export default function CoachProfilePage() {
     : null;
 
   const firstLetter = coach.name?.charAt(0)?.toUpperCase() || "?";
-  const bioText = coach.bio?.trim() ? coach.bio : "—";
-  const bioIsArabic = isArabic(bioText);
 
   return (
     <div className="animate-fade-in space-y-4 md:space-y-5">
@@ -87,9 +94,11 @@ export default function CoachProfilePage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300/90">
             SWIMAX · Coach
           </p>
-          <h1 className="mt-2 text-2xl font-semibold text-white md:text-3xl">
-            {coach.name}
-          </h1>
+
+          <SmartText
+            text={coach.name}
+            className="mt-2 text-2xl font-semibold text-white md:text-3xl"
+          />
         </div>
 
         {/* Content */}
@@ -123,9 +132,10 @@ export default function CoachProfilePage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Name
                 </p>
-                <p className="mt-2 text-lg font-medium text-white">
-                  {coach.name}
-                </p>
+                <SmartText
+                  text={coach.name}
+                  className="mt-2 text-lg font-medium text-white"
+                />
               </div>
 
               {/* Age */}
@@ -143,9 +153,10 @@ export default function CoachProfilePage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Phone
                 </p>
-                <p className="mt-2 text-slate-300">
-                  {coach.phone || "—"}
-                </p>
+                <SmartText
+                  text={coach.phone}
+                  className="mt-2 text-slate-300"
+                />
               </div>
 
               {/* Address */}
@@ -153,9 +164,10 @@ export default function CoachProfilePage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Address
                 </p>
-                <p className="mt-2 text-slate-300">
-                  {coach.address || "—"}
-                </p>
+                <SmartText
+                  text={coach.address}
+                  className="mt-2 text-slate-300"
+                />
               </div>
 
               {/* Bio */}
@@ -163,14 +175,10 @@ export default function CoachProfilePage() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Bio
                 </p>
-                <p
-                  dir={bioIsArabic ? "rtl" : "ltr"}
-                  className={`mt-2 whitespace-pre-wrap break-words leading-relaxed text-slate-300 ${
-                    bioIsArabic ? "text-right" : "text-left"
-                  }`}
-                >
-                  {bioText}
-                </p>
+                <SmartText
+                  text={coach.bio}
+                  className="mt-2 whitespace-pre-wrap break-words leading-relaxed text-slate-300"
+                />
               </div>
 
               {/* Hours */}
@@ -183,17 +191,18 @@ export default function CoachProfilePage() {
                 </p>
               </div>
 
-              {/* 🔥 Skill Level */}
+              {/* Skill Level */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Skill Level
                 </p>
-                <p className="mt-2 text-slate-300">
-                  {coach.level || "—"}
-                </p>
+                <SmartText
+                  text={coach.level}
+                  className="mt-2 text-slate-300"
+                />
               </div>
 
-              {/* 🔥 Created */}
+              {/* Created */}
               <div className="profile-stat">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Record created

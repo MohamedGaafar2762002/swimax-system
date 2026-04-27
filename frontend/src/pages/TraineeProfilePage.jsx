@@ -8,8 +8,17 @@ function getErrorMessage(err) {
   return "Something went wrong";
 }
 
-function isArabic(text) {
-  return /[\u0600-\u06FF]/.test(text || "");
+// 🔥 Smart RTL / LTR Component
+function SmartText({ text, className = "" }) {
+  const isArabic = /[\u0600-\u06FF]/.test(text || "");
+  return (
+    <p
+      dir={isArabic ? "rtl" : "ltr"}
+      className={`${className} ${isArabic ? "text-right" : "text-left"}`}
+    >
+      {text || "—"}
+    </p>
+  );
 }
 
 function sessionSummary(trainee) {
@@ -85,7 +94,6 @@ export default function TraineeProfilePage() {
   const imageUrl = trainee.image || null;
   const firstLetter = trainee.name?.charAt(0)?.toUpperCase() || "?";
   const notesText = trainee.notes?.trim() ? trainee.notes : "No notes added";
-  const notesIsArabic = isArabic(notesText);
 
   return (
     <div className="animate-fade-in space-y-4 md:space-y-5">
@@ -94,16 +102,21 @@ export default function TraineeProfilePage() {
       </Link>
 
       <div className="card-float overflow-hidden p-0">
+        {/* HEADER */}
         <div className="border-b border-cyan-500/10 bg-gradient-to-r from-cyan-500/10 via-transparent to-sky-500/10 px-5 py-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300/90">
             SWIMAX · Trainee
           </p>
-          <h1 className="mt-2 text-2xl font-semibold text-white md:text-3xl">
-            {trainee.name}
-          </h1>
+
+          <SmartText
+            text={trainee.name}
+            className="mt-2 text-2xl font-semibold text-white md:text-3xl"
+          />
         </div>
 
+        {/* CONTENT */}
         <div className="flex flex-col gap-4 p-5 md:grid md:grid-cols-[220px_minmax(0,1fr)] md:items-start">
+          
           {/* IMAGE */}
           <div className="mx-auto w-full md:mx-0 md:self-start">
             <div className="relative h-[240px] w-full overflow-hidden rounded-2xl border border-cyan-500/25 shadow-glow-sm ring-2 ring-cyan-400/10 md:h-[260px]">
@@ -124,7 +137,10 @@ export default function TraineeProfilePage() {
               {/* NAME */}
               <div className="profile-stat">
                 <p className="text-xs text-slate-500">Name</p>
-                <p className="mt-2 text-lg text-white">{trainee.name}</p>
+                <SmartText
+                  text={trainee.name}
+                  className="mt-2 text-lg text-white"
+                />
               </div>
 
               {/* AGE */}
@@ -136,24 +152,31 @@ export default function TraineeProfilePage() {
               {/* PHONE */}
               <div className="profile-stat">
                 <p className="text-xs text-slate-500">Phone</p>
-                <p className="mt-2 text-slate-300">{trainee.phone || "—"}</p>
+                <SmartText
+                  text={trainee.phone}
+                  className="mt-2 text-slate-300"
+                />
               </div>
 
               {/* ADDRESS */}
               <div className="profile-stat">
                 <p className="text-xs text-slate-500">Address</p>
-                <p className="mt-2 text-slate-300">{trainee.address || "—"}</p>
+                <SmartText
+                  text={trainee.address}
+                  className="mt-2 text-slate-300"
+                />
               </div>
 
-              {/* 🔥 Skill Level */}
+              {/* SKILL */}
               <div className="profile-stat border-sky-500/20 bg-gradient-to-br from-sky-500/5 to-transparent">
                 <p className="text-xs text-slate-500">Skill level</p>
-                <p className="mt-2 text-xl font-bold text-cyan-300">
-                  {trainee.level}
-                </p>
+                <SmartText
+                  text={trainee.level}
+                  className="mt-2 text-xl font-bold text-cyan-300"
+                />
               </div>
 
-              {/* 🔥 Created جنبها */}
+              {/* CREATED */}
               <div className="profile-stat">
                 <p className="text-xs text-slate-500">Created</p>
                 <p className="mt-2 text-slate-300">
@@ -166,20 +189,19 @@ export default function TraineeProfilePage() {
               {/* SESSION */}
               <div className="profile-stat sm:col-span-2">
                 <p className="text-xs text-slate-500">Group session</p>
-                <p className="mt-2 text-slate-300">
-                  {sessionSummary(trainee)}
-                </p>
+                <SmartText
+                  text={sessionSummary(trainee)}
+                  className="mt-2 text-slate-300"
+                />
               </div>
 
               {/* NOTES */}
               <div className="profile-stat sm:col-span-2">
                 <p className="text-xs text-slate-500">Notes</p>
-                <p
-                  dir={notesIsArabic ? "rtl" : "ltr"}
+                <SmartText
+                  text={notesText}
                   className="mt-2 text-slate-300 whitespace-pre-wrap"
-                >
-                  {notesText}
-                </p>
+                />
               </div>
 
             </div>
