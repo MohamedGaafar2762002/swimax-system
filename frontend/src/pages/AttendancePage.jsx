@@ -5,23 +5,6 @@ import ConfirmModal from "../components/ConfirmModal.jsx";
 import FullscreenModal from "../components/FullscreenModal.jsx"; // ✅ مهم
 import { formatDuration, hoursToMinutes } from "../utils/formatDuration.js";
 
-function downloadCSV(filename, rows) {
-  const processRow = (row) =>
-    row.map((item) => `"${item ?? ""}"`).join(",");
-
-  const csvContent = rows.map(processRow).join("\n");
-  const BOM = "\uFEFF";
-
-  const blob = new Blob([BOM + csvContent], {
-    type: "text/csv;charset=utf-8;",
-  });
-
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  link.click();
-}
-
 function getErrorMessage(err) {
   const msg = err?.response?.data?.message;
   if (typeof msg === "string") return msg;
@@ -46,32 +29,8 @@ function formatSessionSchedule(session) {
   return `${first.day} ${first.startTime}-${first.endTime}`;
 }
 
-function monthToDateRange(monthValue) {
-  if (!/^\d{4}-\d{2}$/.test(String(monthValue ?? "").trim())) {
-    return null;
-  }
-  const [yearStr, monthStr] = String(monthValue).split("-");
-  const year = Number(yearStr);
-  const month = Number(monthStr);
-  if (!year || month < 1 || month > 12) return null;
-
-  const first = new Date(year, month - 1, 1);
-  const last = new Date(year, month, 0);
-
-  const toDateOnly = (d) =>
-    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
-      d.getDate()
-    ).padStart(2, "0")}`;
-
-  return {
-    startDate: toDateOnly(first),
-    endDate: toDateOnly(last),
-  };
-}
-
 export default function AttendancePage() {
   const [records, setRecords] = useState([]);
-  const [payroll, setPayroll] = useState([]);
   const [coaches, setCoaches] = useState([]);
   const [sessions, setSessions] = useState([]);
 
@@ -81,19 +40,13 @@ export default function AttendancePage() {
   const [sessionId, setSessionId] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const [payrollStartDate, setPayrollStartDate] = useState("");
-  const [payrollEndDate, setPayrollEndDate] = useState("");
-  const [payrollMonth, setPayrollMonth] = useState("");
-
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
   const [loading, setLoading] = useState(true);
-  const [summaryLoading, setSummaryLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
 
   const [clearOpen, setClearOpen] = useState(false);
   const [clearSubmitting, setClearSubmitting] = useState(false);
@@ -101,45 +54,6 @@ export default function AttendancePage() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [detailsNote, setDetailsNote] = useState("");
   const detailsNoteIsArabic = isArabic(detailsNote);
-
-  // ================= EXPORT =================
-
-  function handleExportAttendance() {
-    if (!records.length) return;
-
-    const rows = [
-      ["Date", "Coach", "Session", "Time", "Duration"],
-      ...records.map((r) => [
-        r.date,
-        r.coachId?.name || "",
-        formatSessionSchedule(r.sessionId),
-        `${r.startTime} - ${r.endTime}`,
-        formatDuration(
-          r.durationMinutes ?? hoursToMinutes(r.durationHours)
-        ),
-      ]),
-    ];
-
-    const today = new Date().toISOString().split("T")[0];
-    downloadCSV(`attendance-${today}.csv`, rows);
-  }
-
-  function handleExportPayroll() {
-    if (!payroll.length) return;
-
-    const rows = [
-      ["Coach Name", "Total Duration"],
-      ...payroll.map((c) => [
-        c.coachName,
-        formatDuration(
-          c.totalMinutes ?? hoursToMinutes(c.totalHours)
-        ),
-      ]),
-    ];
-
-    const today = new Date().toISOString().split("T")[0];
-    downloadCSV(`payroll-${today}.csv`, rows);
-  }
 
   // ================= LOAD =================
 
@@ -157,7 +71,7 @@ export default function AttendancePage() {
     }
   }, []);
 
-  const loadAttendanceHistory = useCallback(async () => {
+  const loadAttendance = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await api.get("/api/attendance/history", {
@@ -183,34 +97,13 @@ export default function AttendancePage() {
     }
   }, [startDate, endDate, coachId, sessionId, statusFilter, page, limit]);
 
-  const loadPayrollSummary = useCallback(async () => {
-    setSummaryLoading(true);
-    try {
-      const { data } = await api.get("/api/attendance/payroll-summary", {
-        params: {
-          startDate: payrollStartDate,
-          endDate: payrollEndDate,
-        },
-      });
-      setPayroll(data || []);
-    } catch (err) {
-      setError(getErrorMessage(err));
-    } finally {
-      setSummaryLoading(false);
-    }
-  }, [payrollStartDate, payrollEndDate]);
-
   useEffect(() => {
     loadReferences();
   }, []);
 
   useEffect(() => {
-    loadAttendanceHistory();
-  }, [loadAttendanceHistory]);
-
-  useEffect(() => {
-    loadPayrollSummary();
-  }, [loadPayrollSummary]);
+    loadAttendance();
+  }, [loadAttendance]);
 
   // ================= ACTION =================
 
@@ -218,10 +111,7 @@ export default function AttendancePage() {
     setClearSubmitting(true);
     try {
       await api.delete("/api/attendance/clear");
-      await Promise.all([
-        loadAttendanceHistory(),
-        loadPayrollSummary(),
-      ]);
+      await loadAttendance();
       setClearOpen(false);
     } catch (err) {
       setError(getErrorMessage(err));
@@ -230,6 +120,10 @@ export default function AttendancePage() {
     }
   }
 
+  const emptyHint = loading
+    ? "Loading..."
+    : "No attendance records.";
+
   // ================= UI =================
 
   return (
@@ -237,20 +131,103 @@ export default function AttendancePage() {
 
       {error && <div className="error-box">{error}</div>}
 
-      <button
-        onClick={() => setClearOpen(true)}
-        className="btn-secondary"
-      >
-        Clear Attendance Data
-      </button>
+      {/* FILTERS */}
+      <section className="toolbar-strip">
+        <div className="grid gap-3 md:grid-cols-6">
 
-      {/* 🔥 FULLSCREEN CLEAR */}
+          <input type="date" value={startDate} onChange={(e)=>setStartDate(e.target.value)} className="input-field"/>
+
+          <input type="date" value={endDate} onChange={(e)=>setEndDate(e.target.value)} className="input-field"/>
+
+          <select value={coachId} onChange={(e)=>setCoachId(e.target.value)} className="input-field-select">
+            <option value="">All coaches</option>
+            {coaches.map(c=> <option key={c._id} value={c._id}>{c.name}</option>)}
+          </select>
+
+          <select value={sessionId} onChange={(e)=>setSessionId(e.target.value)} className="input-field-select">
+            <option value="">All sessions</option>
+            {sessions.map(s=> <option key={s._id} value={s._id}>{formatSessionSchedule(s)}</option>)}
+          </select>
+
+          <select value={statusFilter} onChange={(e)=>setStatusFilter(e.target.value)} className="input-field-select">
+            <option value="all">All</option>
+            <option value="attended">Attended</option>
+            <option value="not_attended">Not attended</option>
+          </select>
+
+          <select value={limit} onChange={(e)=>setLimit(Number(e.target.value))} className="input-field-select">
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
+
+        <div className="flex justify-end pt-3">
+          <button
+            onClick={()=>setClearOpen(true)}
+            className="btn-secondary border-red-500/40"
+          >
+            Clear Attendance Data
+          </button>
+        </div>
+      </section>
+
+      {/* TABLE */}
+      <section className="table-shell">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Coach</th>
+              <th>Session</th>
+              <th>Duration</th>
+              <th>Status</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {records.length ? records.map(r=>(
+              <tr key={r._id}>
+                <td>{formatDateOnly(r.date)}</td>
+                <td>{r.coachId?.name}</td>
+                <td>{formatSessionSchedule(r.sessionId)}</td>
+                <td>{formatDuration(r.durationMinutes)}</td>
+                <td>{r.attended ? "Attended" : "Not attended"}</td>
+                <td>
+                  {!r.attended && (
+                    <button onClick={()=>{
+                      setDetailsNote(r.note || "No reason");
+                      setDetailsOpen(true);
+                    }}>
+                      Details
+                    </button>
+                  )}
+                </td>
+              </tr>
+            )) : (
+              <tr>
+                <td colSpan={6}>{emptyHint}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </section>
+
+      {/* PAGINATION */}
+      <CoachesPagination
+        currentPage={page}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        limit={limit}
+        loading={loading}
+        onPrev={()=>setPage(p=>p-1)}
+        onNext={()=>setPage(p=>p+1)}
+      />
+
+      {/* ✅ FULLSCREEN CLEAR */}
       <FullscreenModal
         open={clearOpen}
-        onClose={() => {
-          if (clearSubmitting) return;
-          setClearOpen(false);
-        }}
+        onClose={()=>!clearSubmitting && setClearOpen(false)}
         closeDisabled={clearSubmitting}
         title="Clear attendance data"
         maxWidthClassName="max-w-xl"
@@ -260,21 +237,16 @@ export default function AttendancePage() {
             This will permanently delete ALL attendance records.
           </p>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
-            <button
-              onClick={() => setClearOpen(false)}
-              className="btn-secondary"
-              disabled={clearSubmitting}
-            >
+          <div className="flex justify-end gap-3 border-t pt-4">
+            <button onClick={()=>setClearOpen(false)} className="btn-secondary">
               Cancel
             </button>
 
             <button
               onClick={confirmClearAttendance}
-              className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl"
-              disabled={clearSubmitting}
+              className="bg-red-600 text-white px-4 py-2 rounded-xl"
             >
-              {clearSubmitting ? "Clearing..." : "Clear attendance data"}
+              {clearSubmitting ? "Clearing..." : "Clear"}
             </button>
           </div>
         </div>
@@ -283,17 +255,10 @@ export default function AttendancePage() {
       {/* DETAILS */}
       <ConfirmModal
         open={detailsOpen}
-        title="Absence details"
-        message={
-          <span
-            dir={detailsNoteIsArabic ? "rtl" : "ltr"}
-            className="block whitespace-pre-wrap"
-          >
-            {detailsNote}
-          </span>
-        }
-        onConfirm={() => setDetailsOpen(false)}
-        onCancel={() => setDetailsOpen(false)}
+        title="Details"
+        message={<span dir={detailsNoteIsArabic ? "rtl":"ltr"}>{detailsNote}</span>}
+        onConfirm={()=>setDetailsOpen(false)}
+        onCancel={()=>setDetailsOpen(false)}
         hideConfirm
       />
     </div>
