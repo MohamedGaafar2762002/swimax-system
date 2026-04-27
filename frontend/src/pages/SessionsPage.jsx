@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import api from "../services/api.js";
 import SessionTable from "../components/SessionTable.jsx";
 import SessionForm from "../components/SessionForm.jsx";
@@ -38,7 +38,6 @@ export default function SessionsPage() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
 
   const [formOpen, setFormOpen] = useState(false);
   const [formMode, setFormMode] = useState("create");
@@ -52,22 +51,20 @@ export default function SessionsPage() {
   const [clearOpen, setClearOpen] = useState(false);
   const [clearSubmitting, setClearSubmitting] = useState(false);
 
-  // 🔥 delete states
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deletingSession, setDeletingSession] = useState(null);
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
   const currentSessionId = editingSession?._id ?? null;
 
-  // ================= LOAD DATA =================
+  // ================= LOAD =================
   const loadReferenceData = useCallback(async () => {
     setReferenceLoading(true);
     try {
       const [coachesRes, traineesRes] = await Promise.all([
-        api.get("/api/coaches", { params: { page: 1, limit: 100 } }),
-        api.get("/api/trainees", { params: { page: 1, limit: 1000 } }),
+        api.get("/api/coaches"),
+        api.get("/api/trainees"),
       ]);
-
       setCoaches(coachesRes.data?.coaches || []);
       setTrainees(traineesRes.data?.trainees || []);
     } catch (err) {
@@ -85,13 +82,7 @@ export default function SessionsPage() {
     setLoading(true);
     try {
       const { data } = await api.get("/api/sessions", {
-        params: {
-          search: debouncedSearch || undefined,
-          page,
-          limit,
-          sortBy,
-          order,
-        },
+        params: { search: debouncedSearch, page, limit, sortBy, order },
       });
 
       setSessions(data.sessions || []);
@@ -109,7 +100,6 @@ export default function SessionsPage() {
   }, [loadSessions]);
 
   // ================= ACTIONS =================
-
   function openCreate() {
     setFormMode("create");
     setEditingSession(null);
@@ -136,7 +126,6 @@ export default function SessionsPage() {
       } else {
         await api.put(`/api/sessions/${editingSession._id}`, payload);
       }
-
       await loadSessions();
       closeForm();
     } catch (err) {
@@ -146,7 +135,6 @@ export default function SessionsPage() {
     }
   }
 
-  // 🔥 DELETE
   function openDelete(session) {
     setDeletingSession(session);
     setDeleteOpen(true);
@@ -159,8 +147,6 @@ export default function SessionsPage() {
   }
 
   async function confirmDelete() {
-    if (!deletingSession?._id) return;
-
     setDeleteSubmitting(true);
     try {
       await api.delete(`/api/sessions/${deletingSession._id}`);
@@ -173,7 +159,6 @@ export default function SessionsPage() {
     }
   }
 
-  // CLEAR
   async function confirmClearAllSessions() {
     setClearSubmitting(true);
     try {
@@ -186,8 +171,6 @@ export default function SessionsPage() {
       setClearSubmitting(false);
     }
   }
-
-  // ================= OPTIONS =================
 
   const traineeOptions = useMemo(() => {
     return trainees.map((t) => {
@@ -202,14 +185,12 @@ export default function SessionsPage() {
   }, [trainees, currentSessionId]);
 
   // ================= UI =================
-
   return (
     <div className="animate-fade-in space-y-5">
 
       {error && <div className="error-box">{error}</div>}
-      {successMessage && <div className="text-cyan-200">{successMessage}</div>}
 
-      <div className="card-float p-4 space-y-4">
+      <div className="card-float p-4">
         <SessionsToolbar
           search={search}
           onSearchChange={setSearch}
@@ -221,13 +202,9 @@ export default function SessionsPage() {
           onLimitChange={setLimit}
           actions={
             <>
-              <button
-                onClick={() => setClearOpen(true)}
-                className="btn-secondary border-red-500/40"
-              >
+              <button onClick={() => setClearOpen(true)} className="btn-secondary">
                 Clear All Sessions
               </button>
-
               <button onClick={openCreate} className="btn-primary">
                 Add session
               </button>
@@ -236,7 +213,6 @@ export default function SessionsPage() {
         />
       </div>
 
-      {/* ✅ مهم جدا */}
       <SessionTable
         sessions={sessions}
         loading={loading}
@@ -260,14 +236,7 @@ export default function SessionsPage() {
         onClose={closeForm}
         closeDisabled={formSubmitting}
         title={formMode === "create" ? "Create session" : "Edit session"}
-        maxWidthClassName="max-w-5xl"
       >
-        {referenceLoading && (
-          <p className="mb-4 text-sm text-sky-200/70">
-            Loading coaches and trainees…
-          </p>
-        )}
-
         <SessionForm
           initialValues={
             editingSession
@@ -290,17 +259,35 @@ export default function SessionsPage() {
         />
       </FullscreenModal>
 
-      {/* DELETE MODAL */}
-      <ConfirmModal
+      {/* 🔥 DELETE FULLSCREEN */}
+      <FullscreenModal
         open={deleteOpen}
-        title="Delete session?"
-        message="This will delete this session"
-        onConfirm={confirmDelete}
-        onCancel={closeDelete}
-        loading={deleteSubmitting}
-      />
+        onClose={closeDelete}
+        closeDisabled={deleteSubmitting}
+        title="Delete session"
+        maxWidthClassName="max-w-xl"
+      >
+        <div className="space-y-6">
+          <p className="text-slate-400">
+            This will permanently delete this session.
+          </p>
 
-      {/* CLEAR MODAL */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
+            <button onClick={closeDelete} className="btn-secondary">
+              Cancel
+            </button>
+
+            <button
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl"
+            >
+              {deleteSubmitting ? "Deleting..." : "Delete"}
+            </button>
+          </div>
+        </div>
+      </FullscreenModal>
+
+      {/* CLEAR */}
       <ConfirmModal
         open={clearOpen}
         title="Are you sure?"
