@@ -566,48 +566,18 @@ export default function AttendancePage() {
         </div>
       </section>
 
-      {clearOpen && (
-        <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Clear attendance confirmation"
-          onMouseDown={(e) => {
-            if (e.target !== e.currentTarget) return;
-            if (clearSubmitting) return;
-            setClearOpen(false);
-          }}
-        >
-          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[rgba(10,22,46,0.9)] p-6 shadow-2xl">
-            <h2 className="text-xl font-semibold text-white">Are you sure?</h2>
-            <p className="mt-2 text-sm text-slate-300">
-              This will permanently delete all attendance records.
-            </p>
-
-            <div className="mt-6 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (clearSubmitting) return;
-                  setClearOpen(false);
-                }}
-                disabled={clearSubmitting}
-                className="btn-secondary disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={confirmClearAttendance}
-                disabled={clearSubmitting}
-                className="rounded-2xl border border-red-500/45 bg-red-950/35 px-4 py-2.5 text-sm font-semibold text-red-100 transition hover:border-red-400/60 hover:bg-red-950/55 disabled:opacity-50"
-              >
-                {clearSubmitting ? "Clearing..." : "Clear attendance data"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        open={clearOpen}
+        title="Clear attendance data"
+        message="This will permanently delete all attendance records."
+        confirmLabel="Clear attendance data"
+        onConfirm={confirmClearAttendance}
+        onCancel={() => {
+          if (clearSubmitting) return;
+          setClearOpen(false);
+        }}
+        loading={clearSubmitting}
+      />
 
       <ConfirmModal
         open={detailsOpen}
