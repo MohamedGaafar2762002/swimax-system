@@ -543,18 +543,41 @@ export default function AttendancePage() {
         </div>
       </section>
 
-      <ConfirmModal
-        open={clearOpen}
-        title="Are you sure?"
-        message="This will permanently delete all attendance records."
-        confirmLabel="Clear attendance data"
-        onConfirm={confirmClearAttendance}
-        onCancel={() => {
-          if (clearSubmitting) return;
-          setClearOpen(false);
-        }}
-        loading={clearSubmitting}
-      />
+   {/* 🔥 CLEAR ATTENDANCE FULLSCREEN */}
+<FullscreenModal
+  open={clearOpen}
+  onClose={() => {
+    if (clearSubmitting) return;
+    setClearOpen(false);
+  }}
+  closeDisabled={clearSubmitting}
+  title="Clear attendance data"
+  maxWidthClassName="max-w-xl"
+>
+  <div className="space-y-6">
+    <p className="text-slate-400">
+      This will permanently delete ALL attendance records.
+    </p>
+
+    <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
+      <button
+        onClick={() => setClearOpen(false)}
+        className="btn-secondary"
+        disabled={clearSubmitting}
+      >
+        Cancel
+      </button>
+
+      <button
+        onClick={confirmClearAttendance}
+        className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl"
+        disabled={clearSubmitting}
+      >
+        {clearSubmitting ? "Clearing..." : "Clear attendance data"}
+      </button>
+    </div>
+  </div>
+</FullscreenModal>
 
       <ConfirmModal
         open={detailsOpen}
