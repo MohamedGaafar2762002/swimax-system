@@ -10,9 +10,9 @@ export default function SessionsToolbar({
   actions = null,
 }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
 
-      {/* 🔥 TOP BAR (كلهم في سطر واحد) */}
+      {/* 🔥 FILTERS ROW */}
       <div className="grid gap-4 md:grid-cols-[2fr_1fr_1fr_1fr] items-end">
 
         {/* SEARCH */}
@@ -36,14 +36,10 @@ export default function SessionsToolbar({
 
         {/* SORT */}
         <div>
-          <label
-            htmlFor="session-sort"
-            className="block text-xs font-semibold uppercase tracking-wider text-slate-500"
-          >
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
             Sort by
           </label>
           <select
-            id="session-sort"
             value={sortBy}
             onChange={(e) => onSortByChange(e.target.value)}
             className="input-field-select mt-2 w-full !px-3 !py-2"
@@ -55,14 +51,10 @@ export default function SessionsToolbar({
 
         {/* ORDER */}
         <div>
-          <label
-            htmlFor="session-order"
-            className="block text-xs font-semibold uppercase tracking-wider text-slate-500"
-          >
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
             Order
           </label>
           <select
-            id="session-order"
             value={order}
             onChange={(e) => onOrderChange(e.target.value)}
             className="input-field-select mt-2 w-full !px-3 !py-2"
@@ -74,14 +66,10 @@ export default function SessionsToolbar({
 
         {/* LIMIT */}
         <div>
-          <label
-            htmlFor="session-limit"
-            className="block text-xs font-semibold uppercase tracking-wider text-slate-500"
-          >
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
             Per page
           </label>
           <select
-            id="session-limit"
             value={String(limit)}
             onChange={(e) => onLimitChange(Number(e.target.value))}
             className="input-field-select mt-2 w-full !px-3 !py-2"
@@ -93,12 +81,12 @@ export default function SessionsToolbar({
         </div>
       </div>
 
-      {/* 🔥 BUTTONS تحت */}
-      {actions ? (
-        <div className="flex justify-end gap-2">
+      {/* 🔥 BUTTONS ROW (لوحدها تحت + يمين) */}
+      {actions && (
+        <div className="flex justify-end gap-2 pt-2">
           {actions}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
