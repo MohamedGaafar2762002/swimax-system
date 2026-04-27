@@ -5,13 +5,8 @@ import SessionForm from "../components/SessionForm.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 import SessionsToolbar from "../components/SessionsToolbar.jsx";
 import CoachesPagination from "../components/CoachesPagination.jsx";
-import FullscreenModal from "../components/FullscreenModal.jsx"; // ✅ مهم
+import FullscreenModal from "../components/FullscreenModal.jsx";
 import { useDebouncedValue } from "../hooks/useDebouncedValue.js";
-import {
-  formatLocalDateYYYYMMDD,
-  normalizeTimeHHMM,
-  parseTimeToMinutes,
-} from "../utils/localDateTime.js";
 
 function getErrorMessage(err) {
   const msg = err?.response?.data?.message;
@@ -26,14 +21,6 @@ function formatSessionLabel(sessionId) {
   const firstSlot = schedule[0];
   const shortDay = String(firstSlot.day ?? "").slice(0, 3);
   return `${shortDay} ${firstSlot.startTime}-${firstSlot.endTime}`;
-}
-
-function dayNameFromDate(date) {
-  return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][date.getDay()];
-}
-
-function buildOccurrenceKey(sessionId, dateStr, startTime) {
-  return `${String(sessionId)}|${dateStr}|${startTime}`;
 }
 
 export default function SessionsPage() {
@@ -65,15 +52,14 @@ export default function SessionsPage() {
   const [clearOpen, setClearOpen] = useState(false);
   const [clearSubmitting, setClearSubmitting] = useState(false);
 
-  const filtersRef = useRef({
-    search: debouncedSearch,
-    sortBy,
-    order,
-    limit,
-  });
+  // 🔥 delete states
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletingSession, setDeletingSession] = useState(null);
+  const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
   const currentSessionId = editingSession?._id ?? null;
 
+  // ================= LOAD DATA =================
   const loadReferenceData = useCallback(async () => {
     setReferenceLoading(true);
     try {
@@ -122,9 +108,17 @@ export default function SessionsPage() {
     loadSessions();
   }, [loadSessions]);
 
+  // ================= ACTIONS =================
+
   function openCreate() {
     setFormMode("create");
     setEditingSession(null);
+    setFormOpen(true);
+  }
+
+  function openEdit(session) {
+    setFormMode("edit");
+    setEditingSession(session);
     setFormOpen(true);
   }
 
@@ -142,6 +136,7 @@ export default function SessionsPage() {
       } else {
         await api.put(`/api/sessions/${editingSession._id}`, payload);
       }
+
       await loadSessions();
       closeForm();
     } catch (err) {
@@ -151,6 +146,34 @@ export default function SessionsPage() {
     }
   }
 
+  // 🔥 DELETE
+  function openDelete(session) {
+    setDeletingSession(session);
+    setDeleteOpen(true);
+  }
+
+  function closeDelete() {
+    if (deleteSubmitting) return;
+    setDeleteOpen(false);
+    setDeletingSession(null);
+  }
+
+  async function confirmDelete() {
+    if (!deletingSession?._id) return;
+
+    setDeleteSubmitting(true);
+    try {
+      await api.delete(`/api/sessions/${deletingSession._id}`);
+      await loadSessions();
+      closeDelete();
+    } catch (err) {
+      setError(getErrorMessage(err));
+    } finally {
+      setDeleteSubmitting(false);
+    }
+  }
+
+  // CLEAR
   async function confirmClearAllSessions() {
     setClearSubmitting(true);
     try {
@@ -164,6 +187,8 @@ export default function SessionsPage() {
     }
   }
 
+  // ================= OPTIONS =================
+
   const traineeOptions = useMemo(() => {
     return trainees.map((t) => {
       const assigned = t.sessionId?._id || t.sessionId;
@@ -175,6 +200,8 @@ export default function SessionsPage() {
       };
     });
   }, [trainees, currentSessionId]);
+
+  // ================= UI =================
 
   return (
     <div className="animate-fade-in space-y-5">
@@ -209,7 +236,13 @@ export default function SessionsPage() {
         />
       </div>
 
-      <SessionTable sessions={sessions} loading={loading} />
+      {/* ✅ مهم جدا */}
+      <SessionTable
+        sessions={sessions}
+        loading={loading}
+        onEdit={openEdit}
+        onDelete={openDelete}
+      />
 
       <CoachesPagination
         currentPage={page}
@@ -221,7 +254,7 @@ export default function SessionsPage() {
         onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
       />
 
-      {/* ✅ FULLSCREEN FORM */}
+      {/* FORM */}
       <FullscreenModal
         open={formOpen}
         onClose={closeForm}
@@ -236,11 +269,19 @@ export default function SessionsPage() {
         )}
 
         <SessionForm
-          initialValues={{
-            coachId: "",
-            traineeIds: [],
-            schedule: [{ day: "Sunday", startTime: "", endTime: "" }],
-          }}
+          initialValues={
+            editingSession
+              ? {
+                  coachId: editingSession.coachId?._id || editingSession.coachId,
+                  traineeIds: editingSession.trainees?.map(t => t._id || t) || [],
+                  schedule: editingSession.schedule || [],
+                }
+              : {
+                  coachId: "",
+                  traineeIds: [],
+                  schedule: [{ day: "Sunday", startTime: "", endTime: "" }],
+                }
+          }
           coaches={coaches}
           trainees={traineeOptions}
           onSubmit={handleFormSubmit}
@@ -249,6 +290,17 @@ export default function SessionsPage() {
         />
       </FullscreenModal>
 
+      {/* DELETE MODAL */}
+      <ConfirmModal
+        open={deleteOpen}
+        title="Delete session?"
+        message="This will delete this session"
+        onConfirm={confirmDelete}
+        onCancel={closeDelete}
+        loading={deleteSubmitting}
+      />
+
+      {/* CLEAR MODAL */}
       <ConfirmModal
         open={clearOpen}
         title="Are you sure?"
