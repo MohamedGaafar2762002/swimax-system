@@ -288,14 +288,41 @@ export default function SessionsPage() {
       </FullscreenModal>
 
       {/* CLEAR */}
-      <ConfirmModal
-        open={clearOpen}
-        title="Are you sure?"
-        message="This will delete all sessions"
-        onConfirm={confirmClearAllSessions}
-        onCancel={() => setClearOpen(false)}
-        loading={clearSubmitting}
-      />
+      {/* 🔥 CLEAR FULLSCREEN */}
+<FullscreenModal
+  open={clearOpen}
+  onClose={() => {
+    if (clearSubmitting) return;
+    setClearOpen(false);
+  }}
+  closeDisabled={clearSubmitting}
+  title="Clear all sessions"
+  maxWidthClassName="max-w-xl"
+>
+  <div className="space-y-6">
+    <p className="text-slate-400">
+      This will permanently delete ALL sessions and unassign trainees.
+    </p>
+
+    <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
+      <button
+        onClick={() => setClearOpen(false)}
+        className="btn-secondary"
+        disabled={clearSubmitting}
+      >
+        Cancel
+      </button>
+
+      <button
+        onClick={confirmClearAllSessions}
+        className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl"
+        disabled={clearSubmitting}
+      >
+        {clearSubmitting ? "Clearing..." : "Delete all"}
+      </button>
+    </div>
+  </div>
+</FullscreenModal>
     </div>
   );
 }
